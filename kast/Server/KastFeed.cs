@@ -10,7 +10,7 @@ namespace Kast
 	/// Using KastFeedOption, you can control how the arguments are fed into the 
 	/// destination box.
 	/// </summary>
-	public class KastFeed
+	public class KastFeed : KastComponent
 	{
 		/// <summary>
 		/// The source box. These arguments will be fed into
@@ -32,6 +32,12 @@ namespace Kast
 		public KastFeedOption Option { get; set; }
 
 		/// <summary>
+		/// Name the Box so that it can be accessed from the Relay.
+		/// </summary>
+		/// <value>The name.</value>
+		public string Name {get; set;}
+
+		/// <summary>
 		/// Creates a new feed. 
 		/// </summary>
 		/// <param name="source">Source.</param>
@@ -42,6 +48,20 @@ namespace Kast
 			Source = source;
 			Destination = destination;
 			Option = option;
+		}
+
+		/// <summary>
+		/// Create a new named KastFeed.
+		/// </summary>
+		/// <param name="source">Source.</param>
+		/// <param name="destination">Destination.</param>
+		/// <param name="option">Option.</param>
+		/// <param name="name">Name.</param>
+		public KastFeed(KastBox source, KastBox destination, KastFeedOption option, string name){
+			Source = source;
+			Destination = destination;
+			Option = option;
+			this.Name = name;
 		}
 
 		/// <summary>
@@ -82,6 +102,14 @@ namespace Kast
 		/// </summary>
 		public List<string> GetDestinationOutput(){
 			return Destination.Buffer;
+		}
+
+		public void PulseReact(){
+			Feed ();
+		}
+
+		public string Latest(){
+			return Destination.Latest ();
 		}
 	}
 }

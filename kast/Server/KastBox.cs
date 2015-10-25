@@ -10,7 +10,7 @@ namespace Kast
 	/// "process their buffer", which will run the command with the given
 	/// arguments and put the result in the Buffer.
 	/// </summary>
-	public class KastBox
+	public class KastBox : KastComponent
 	{
 		/// <summary>
 		/// Gets or sets the name of the process.
@@ -23,6 +23,12 @@ namespace Kast
 		/// </summary>
 		/// <value>The process arguments.</value>
 		public List<string> ProcessArguments { get; set; }
+
+		/// <summary>
+		/// Name the Box so that it can be accessed from the Relay.
+		/// </summary>
+		/// <value>The name.</value>
+		public string Name {get; set;}
 
 		/// <summary>
 		/// Gets this Box's buffer
@@ -44,6 +50,38 @@ namespace Kast
 			this.Buffer = new List<string> ();
 		}
 			
+		/// <summary>
+		/// Create a new named KastBox
+		/// </summary>
+		/// <param name="procName">Proc name.</param>
+		/// <param name="name">Name.</param>
+		public KastBox(string procName, string name){
+			ProcessName = procName;
+			Name = name;
+		}
+			
+		/// <summary>
+		/// Create a new KastBox with the specified initial arguments
+		/// </summary>
+		/// <param name="procName">Proc name.</param>
+		/// <param name="initialArgs">Initial arguments.</param>
+		public KastBox(string procName, List<string> initialArgs){
+			Name = procName;
+			ProcessArguments = initialArgs;
+		}
+
+		/// <summary>
+		/// Create a named KastBox with some initial args
+		/// </summary>
+		/// <param name="procName">Proc name.</param>
+		/// <param name="initialArgs">Initial arguments.</param>
+		/// <param name="name">Name.</param>
+		public KastBox(string procName, List<string> initialArgs, string name){
+			ProcessName = procName;
+			ProcessArguments = initialArgs;
+			Name = name;
+		}
+
 		/// <summary>
 		/// Get the arguments for this box as a String
 		/// </summary>
@@ -73,10 +111,17 @@ namespace Kast
 				string processOutput = runningProcess.StandardOutput.ReadToEnd();
 				Buffer.Add(processOutput);
 			} catch(InvalidOperationException e) {
-				//Console.WriteLine(ProcessName + " did not output properly. Ignoring output.");
-				//Console.WriteLine (e.StackTrace);
+				Console.WriteLine(ProcessName + " did not output properly. Ignoring output.");
+				Console.WriteLine (e.StackTrace);
 			}
+		}
+
+		public void PulseReact(){
+			ProcessBuffer ();
+		}
+
+		public string Latest(){
+			return Buffer [Buffer.Count - 1];
 		}
 	}
 }
-

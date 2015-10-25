@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Kast
@@ -27,6 +28,19 @@ namespace Kast
 			return collection;
 		}
 
+		//TODO: Implement for IEnumerable<T: Sized>
+
+		/// <summary>
+		/// Subsequence implemented for arrays
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <param name="start">Start.</param>
+		/// <param name="length">Length.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static List<T> Subsequence<T>(T[] list, int start, int length){
+			return General.Subsequence (new List<T> (list), start, length);
+		}
+
 		/// <summary>
 		/// Test to see if anything in this list satisfies the predicate. This is a 
 		/// built-in function of .NET's Enumerable; however, Mono does not support it yet.
@@ -36,6 +50,16 @@ namespace Kast
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static bool Any<T>(List<T> list, Predicate<T> predicate){
 			return list.FindAll (predicate).Count > 0;
+		}
+
+		/// <summary>
+		/// Any implemented for arrays
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <param name="predicate">Predicate.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static bool Any<T>(T[] list, Predicate<T> predicate){
+			return General.Any (new List<T> (list), predicate);
 		}
 	}
 }

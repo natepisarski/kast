@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kast
+namespace Kast.General
 {
 	/// <summary>
 	/// Sets the options for how Hooks should monitor

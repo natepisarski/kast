@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Kast
+using Kast.General;
+using Kast.Feed;
+using Kast.Base;
+
+namespace Kast.Base
 {
 
 	/// <summary>
@@ -28,7 +32,7 @@ namespace Kast
 			/// Creates a KastBox from the String
 			/// </summary>
 			/// <param name="source">Source.</param>
-			public static KastComponent Build(string[] source) {
+			public static IKastComponent Build(string[] source) {
 				string boxName = "";
 
 				if(!Verify(source))
@@ -61,7 +65,7 @@ namespace Kast
 			/// Create a new Feed given a list of arguments
 			/// </summary>
 			/// <param name="source">Source.</param>
-			public static KastComponent Build(string[] source){
+			public static IKastComponent Build(string[] source){
 				string sourceName = "";
 				int numericalOffset = 0;
 
@@ -76,11 +80,11 @@ namespace Kast
 
 				var sourceWords = source [2 + numericalOffset].Split (' ');
 				var sourceProgram = sourceWords[0];
-				var sourceArgs = General.Subsequence (sourceWords, 1, sourceWords.Length);
+				var sourceArgs = Misc.Subsequence (sourceWords, 1, sourceWords.Length);
 
 				var destWords = source [3 + numericalOffset].Split (' ');
 				var destProgram = destWords [0];
-				var destArgs = General.Subsequence (destWords, 1, destWords.Length);
+				var destArgs = Misc.Subsequence (destWords, 1, destWords.Length);
 
 				// FIXME: Implement Option building
 				return new KastFeed (new KastBox (sourceProgram, sourceArgs, sourceName),
@@ -101,7 +105,7 @@ namespace Kast
 			/// Build a Hook from a list of arguments
 			/// </summary>
 			/// <param name="source">Source.</param>
-			public static KastComponent Build(string[] source){
+			public static IKastComponent Build(string[] source){
 				int numericalOffset = 0;
 				string sourceName = "";
 
@@ -117,7 +121,7 @@ namespace Kast
 
 				string[] sourceWords = source [3 + numericalOffset].Split (' ');
 				string sourceProcess = sourceWords [0];
-				List<string> sourceArgs = General.Subsequence (sourceWords, 1, sourceWords.Length);
+				List<string> sourceArgs = Misc.Subsequence (sourceWords, 1, sourceWords.Length);
 	
 				return new KastHook (new KastBox (sourceProcess, sourceArgs, sourceName),
 					source [2 + numericalOffset],

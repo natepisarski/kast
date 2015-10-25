@@ -1,16 +1,16 @@
 ﻿using System;
-using Kast;
+using Kast.General;
 
 using System.Collections.Generic;
 
-namespace Kast
+namespace Kast.Feed
 {
 	/// <summary>
 	/// KastFeeds control two KastBoxes, feeding the output from one into the other.
 	/// Using KastFeedOption, you can control how the arguments are fed into the 
 	/// destination box.
 	/// </summary>
-	public class KastFeed : KastComponent
+	public class KastFeed : IKastComponent
 	{
 		/// <summary>
 		/// The source box. These arguments will be fed into

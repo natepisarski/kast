@@ -3,14 +3,14 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Kast
+namespace Kast.General
 {
 	/// <summary>
 	/// Kast Boxes wrap a process and arguments. The box can then
 	/// "process their buffer", which will run the command with the given
 	/// arguments and put the result in the Buffer.
 	/// </summary>
-	public class KastBox : KastComponent
+	public class KastBox : IKastComponent
 	{
 		/// <summary>
 		/// Gets or sets the name of the process.

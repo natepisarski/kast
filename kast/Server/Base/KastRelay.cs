@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Kast
+using Kast.Base;
+using Kast.Feed;
+using Kast.General;
+
+namespace Kast.Base
 {
 	/// <summary>
 	/// The relay is the backbone of the Kast system. It controls
@@ -30,7 +34,7 @@ namespace Kast
 		/// <summary>
 		/// Every component in the relay
 		/// </summary>
-		public List<KastComponent> Components {get; set;}
+		public List<IKastComponent> Components {get; set;}
 
 		/// <summary>
 		/// Create an empty KastRelay
@@ -46,7 +50,7 @@ namespace Kast
 		/// Add a new KastComponent to the list of active components
 		/// </summary>
 		/// <param name="component">Component.</param>
-		public void AddComponent(KastComponent component){
+		public void AddComponent(IKastComponent component){
 			if (component is KastBox)
 				ActiveBoxes.Add (component as KastBox);
 			else if (component is KastFeed)
@@ -61,7 +65,7 @@ namespace Kast
 		/// Removes the component from the list of Active Components.
 		/// </summary>
 		/// <param name="component">Component.</param>
-		public void RemoveComponent(KastComponent component){
+		public void RemoveComponent(IKastComponent component){
 			if (component is KastBox)
 				ActiveBoxes.Remove (component as KastBox);
 			else if (component is KastFeed)
@@ -84,7 +88,7 @@ namespace Kast
 
 			// Make the hooks react to the boxes and feeds
 			foreach(KastHook hook in Hooks)
-				foreach(KastComponent component in Components.FindAll(x => x is KastBox || x is KastFeed))
+				foreach(IKastComponent component in Components.FindAll(x => x is KastBox || x is KastFeed))
 					hook.React (component.Latest ());
 
 			// Make the hooks react to hooks

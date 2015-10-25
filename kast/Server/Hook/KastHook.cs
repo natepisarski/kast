@@ -2,13 +2,13 @@
 
 using System.Collections.Generic;
 
-namespace Kast
+namespace Kast.General
 {
 	/// <summary>
 	/// Hooks will capture the input of any command that matches
 	/// their Target, and execute, using the rest of the string as an argument.
 	/// </summary>
-	public class KastHook : KastComponent
+	public class KastHook : IKastComponent
 	{
 		private KastBox Box {get; set; }
 
@@ -98,12 +98,12 @@ namespace Kast
 
 			case KastHookOption.First:
 				if (inputWords [0].Equals (Target))
-					Box.ProcessArguments = General.Subsequence (inputWords, 1, inputWords.Count);
+					Box.ProcessArguments = Misc.Subsequence (inputWords, 1, inputWords.Count);
 				break;
 
 			case KastHookOption.InnerKeep:
 			case KastHookOption.InnerRemove:
-				if (General.Any (inputWords, (x) => x == Target)) {
+				if (Misc.Any (inputWords, (x) => x == Target)) {
 					if (Option == KastHookOption.InnerKeep)
 						Box.ProcessArguments = inputWords;
 					else{
@@ -116,7 +116,7 @@ namespace Kast
 
 			case KastHookOption.Last:
 				if (inputWords [inputWords.Count - 1].Equals (Target))
-					Box.ProcessArguments = General.Subsequence (inputWords, 0, inputWords.Count - 2);
+					Box.ProcessArguments = Misc.Subsequence (inputWords, 0, inputWords.Count - 2);
 				break;
 			}
 

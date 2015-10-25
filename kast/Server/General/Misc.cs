@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Kast
+namespace Kast.General
 {
 	/// <summary>
 	/// General functions. These are functions that are used throughout the Kast
 	/// project but do not belong in any of the other files.
 	/// </summary>
-	public static class General
+	public static class Misc
 	{
 		/// <summary>
 		/// Create a Subsequences of the given list. Collection
@@ -38,7 +38,7 @@ namespace Kast
 		/// <param name="length">Length.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static List<T> Subsequence<T>(T[] list, int start, int length){
-			return General.Subsequence (new List<T> (list), start, length);
+			return Misc.Subsequence (new List<T> (list), start, length);
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Kast
 		/// <param name="predicate">Predicate.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static bool Any<T>(T[] list, Predicate<T> predicate){
-			return General.Any (new List<T> (list), predicate);
+			return Misc.Any (new List<T> (list), predicate);
 		}
 	}
 }

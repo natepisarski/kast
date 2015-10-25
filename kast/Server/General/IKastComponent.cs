@@ -1,9 +1,10 @@
 ﻿using System;
 
 using System.Collections.Generic;
-namespace Kast
+
+namespace Kast.General
 {
-	public interface KastComponent
+	public interface IKastComponent
 	{
 		void PulseReact();
 		string Latest();

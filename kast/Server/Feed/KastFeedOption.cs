@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kast
+namespace Kast.Feed
 {
 	/// <summary>
 	/// Represents options for Kast feeds. The source can either

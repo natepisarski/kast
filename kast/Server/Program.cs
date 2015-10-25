@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Collections.Generic;
 
 using Kast.Base;
 using Kast.Feed;
 using Kast.General;
+
 
 namespace Kast
 {
@@ -84,8 +86,20 @@ namespace Kast
 			TcpListener tcpL = new TcpListener (System.Net.IPAddress.Loopback, 4206);
 			tcpL.Start ();
 
-			for (; /*ever*/;)
-				;//tcpL.AcceptTcpClientAsync ();
+			Console.WriteLine ("Eventually, this will be a server. For now, let's put stuff in the relay manually.");
+
+			List<string> currentInput = new List<String> ();
+			for (; /*ever*/;) {
+
+				Console.WriteLine ("Next string or flush:");
+				var input = Console.ReadLine ();
+				if (input.Equals ("flush")) {
+					kr.AddComponent (currentInput.ToArray ());
+					currentInput = new List<string> ();
+				} else
+					currentInput.Add (input);
+			}
+
 		}
 	}
 }

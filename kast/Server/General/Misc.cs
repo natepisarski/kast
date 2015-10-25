@@ -42,6 +42,16 @@ namespace Kast.General
 		}
 
 		/// <summary>
+		/// Return the full array minus the first element
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <param name="start">Start.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static List<T> Tail<T>(T[] list, int start){
+			return Subsequence (list, 1, list.Length);
+		}
+			
+		/// <summary>
 		/// Test to see if anything in this list satisfies the predicate. This is a 
 		/// built-in function of .NET's Enumerable; however, Mono does not support it yet.
 		/// </summary>
@@ -60,6 +70,32 @@ namespace Kast.General
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static bool Any<T>(T[] list, Predicate<T> predicate){
 			return Misc.Any (new List<T> (list), predicate);
+		}
+
+		/// <summary>
+		/// Create two arrays. The first array is made up of the 
+		/// array's even elements (0, 2, ...) and the second is made up
+		/// of the list's odd-indexed elements (1, 3, ...)
+		/// </summary>
+		/// <param name="originalList">Original list.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static Tuple<T[], T[]> Unbind<T>(T[] originalList){
+			var firstList = new List<T> ();
+			var secondList = new List<T> ();
+
+			// If this is true, add the item to the first list. Second otherwise.
+			bool firstOrSecond = true;
+
+			foreach (T item in originalList) {
+				if (firstOrSecond)
+					firstList.Add (item);
+				else
+					secondList.Add (item);
+
+				firstOrSecond = !firstOrSecond;
+			}
+
+			return new Tuple<T[], T[]>(firstList.ToArray(), secondList.ToArray());
 		}
 	}
 }

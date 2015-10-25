@@ -62,6 +62,14 @@ namespace Kast.Base
 		}
 
 		/// <summary>
+		/// Add a component to the relay with raw information
+		/// </summary>
+		/// <param name="args">Arguments.</param>
+		public void AddComponent(string[] args){
+			AddComponent (KastBuilder.Build (args));
+		}
+
+		/// <summary>
 		/// Removes the component from the list of Active Components.
 		/// </summary>
 		/// <param name="component">Component.</param>
@@ -75,7 +83,7 @@ namespace Kast.Base
 
 			Components.Remove (component);
 		}
-
+			
 		/// <summary>
 		/// Pulse will cause all of the boxes to perform
 		/// their actions.

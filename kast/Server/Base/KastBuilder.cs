@@ -18,6 +18,11 @@ namespace Kast.Base
 	public static class KastBuilder
 	{
 
+		/// <summary>
+		/// Creates a KastBox from the String.
+		/// Formatted: box program {assets}
+		/// Accepted assets: args "comma,separated,args", name "name"
+		/// </summary>
 		public static class Box {
 			/// <summary>
 			/// Verify that the string is in the proper format to create a Box.
@@ -27,29 +32,40 @@ namespace Kast.Base
 			public static bool Verify(string[] toVerify){
 				return toVerify[0].Equals ("box") && toVerify.Length >= 2;
 			}
-
+				
 			/// <summary>
-			/// Creates a KastBox from the String
+			///  Build the box itself
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source) {
-				string boxName = "";
 
 				if(!Verify(source))
 					throw new Exception("Mishapen Box");
 
-				if (source[1].Contains ("named")) {
-					// The name is everything after named
-					boxName = source [2];
-					return new KastBox (source [3], boxName);
-				} else
-					return new KastBox (source [2]);
+				// program arg1 arg2...
+				string[] programString = source [1].Split (' ');
+				KastConfiguration config = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
+				return new KastBox(programString[0], config); 
 
+			}
+
+			/// <summary>
+			/// Build a box from raw components
+			/// </summary>
+			/// <returns>The build.</returns>
+			/// <param name="source">Source.</param>
+			public static IKastComponent RawBuild(string[] source){
+				List<string> argList = new List<string>(source);
+				argList.Insert (0, "box");
+				return Build (argList.ToArray ());
 			}
 		}
 
 		/// <summary>
-		/// Builds a Hook from a String
+		/// Builds a Feed from a String.
+		/// Formatted: feed "source assets" "destination assets" assets
+		/// Accepted assets: name option
+		/// Accepted options: First, All
 		/// </summary>
 		public static class Feed {
 			/// <summary>
@@ -66,32 +82,26 @@ namespace Kast.Base
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source){
-				string sourceName = "";
-				int numericalOffset = 0;
 
 				if (!Verify (source))
 					throw new Exception ("Mishapen Feed");
 
-				if (source [1].Equals ("named")) {
+				var configuration = new KastConfiguration (KastConfiguration.BuildAssets(source [3]));
 
-					sourceName = source [2];
-					numericalOffset = 2;
-				}
-
-				var sourceWords = source [2 + numericalOffset].Split (' ');
-				var sourceProgram = sourceWords[0];
-				var sourceArgs = Misc.Subsequence (sourceWords, 1, sourceWords.Length);
-
-				var destWords = source [3 + numericalOffset].Split (' ');
-				var destProgram = destWords [0];
-				var destArgs = Misc.Subsequence (destWords, 1, destWords.Length);
-
-				// FIXME: Implement Option building
-				return new KastFeed (new KastBox (sourceProgram, sourceArgs, sourceName),
-					new KastBox (destProgram, destArgs, sourceName), KastFeedOption.Last, sourceName);
+				return new KastFeed (
+					(Box.RawBuild (source [1].Split(' ')) as KastBox),
+					(Box.RawBuild (source [2].Split(' ')) as KastBox),
+					configuration);
 			}
 		}
 
+		/// <summary>
+		/// Build a new hook from a string. The
+		/// string's expected format is:
+		/// hook "program args" target assets
+		/// Accepted assets: option, name
+		/// Accepted options: First, Last, InnerRemove, InnerKeep
+		/// </summary>
 		public static class Hook  {
 			/// <summary>
 			/// Expects output in the form of "hook named name target "program args""
@@ -102,31 +112,35 @@ namespace Kast.Base
 			}
 
 			/// <summary>
-			/// Build a Hook from a list of arguments
+			/// Build the Hook itself
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source){
-				int numericalOffset = 0;
-				string sourceName = "";
-
+			
 				if (!Verify (source))
 					throw new Exception ("Mishapen Hook");
 
-				if (source [1].Equals ("named")){
-					numericalOffset = 2;
-					sourceName = source [2];
-				}
-
-				//FIXME: Add Options
-
-				string[] sourceWords = source [3 + numericalOffset].Split (' ');
-				string sourceProcess = sourceWords [0];
-				List<string> sourceArgs = Misc.Subsequence (sourceWords, 1, sourceWords.Length);
-	
-				return new KastHook (new KastBox (sourceProcess, sourceArgs, sourceName),
-					source [2 + numericalOffset],
-					KastHookOption.First);
+				var configuration = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
+				return new KastHook (
+					(Box.RawBuild(source [1].Split (' ')) as KastBox),
+					source [2], configuration);
 			}
+		}
+
+		/// <summary>
+		/// Builds a KastComponent, depending on 
+		/// the first word supplied. Can be: box, hook, feed.
+		/// </summary>
+		/// <param name="source">Source.</param>
+		public static IKastComponent Build(string[] source){
+			if (source [0].Equals ("box"))
+				return Box.Build (source);
+			else if (source [0].Equals ("hook"))
+				return Hook.Build (source);
+			else if (source [0].Equals ("feed"))
+				return Feed.Build (source);
+
+			throw new Exception ("What are you building?");
 		}
 	}
 }

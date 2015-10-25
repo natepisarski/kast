@@ -83,6 +83,21 @@ namespace Kast.General
 		}
 
 		/// <summary>
+		/// Builds a KastBox using the KastConfiguration
+		/// </summary>
+		/// <param name="kc">Kc.</param>
+		public KastBox(string procName, KastConfiguration kc){
+			ProcessName = procName;
+
+			try{
+				ProcessArguments = new List<string>(kc.Assets["arguments"].Split(','));
+				Name = kc.Assets["name"];
+			}catch(Exception e){
+				Defaults ();
+			}
+		}
+
+		/// <summary>
 		/// Get the arguments for this box as a String
 		/// </summary>
 		/// <returns>The arguments.</returns>
@@ -122,6 +137,10 @@ namespace Kast.General
 
 		public string Latest(){
 			return Buffer [Buffer.Count - 1];
+		}
+
+		public void Defaults(){
+			Name = "";
 		}
 	}
 }

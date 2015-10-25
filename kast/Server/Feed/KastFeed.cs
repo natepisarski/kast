@@ -65,6 +65,23 @@ namespace Kast.Feed
 		}
 
 		/// <summary>
+		/// Create a new KastFeed from a KastConfiguration
+		/// </summary>
+		/// <param name="source">Source.</param>
+		/// <param name="destination">Destination.</param>
+		/// <param name="config">Config.</param>
+		public KastFeed(KastBox source, KastBox destination, KastConfiguration config){
+			Source = source;
+			Destination = destination;
+			try {
+				Option = BuildKastFeedOption(config.Assets["option"]);
+				Name = config.Assets["name"];
+			}catch(Exception e){
+				Defaults ();
+			}
+		}
+
+		/// <summary>
 		/// Feed this instance. The behavior
 		/// of this method will vary depending on the value of 
 		/// the KastFeedOption
@@ -110,6 +127,19 @@ namespace Kast.Feed
 
 		public string Latest(){
 			return Destination.Latest ();
+		}
+
+		public void Defaults(){
+			Name = "";
+			Option = KastFeedOption.Last;
+		}
+		/// <summary>
+		/// Builds a KastFeedOption from a string. Expects it to be formatted in
+		/// such a way: "option {All|Last}"
+		/// </summary>
+		/// <param name="buildString">Build string.</param>
+		public static KastFeedOption BuildKastFeedOption(string buildString){
+			return buildString.ToLower ().Contains ("all") ? KastFeedOption.All : KastFeedOption.Last;
 		}
 	}
 }

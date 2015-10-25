@@ -85,6 +85,24 @@ namespace Kast.General
 		}
 
 		/// <summary>
+		/// Build a KastHook using a KastConfiguration
+		/// </summary>
+		/// <param name="box">Box.</param> 
+		/// <param name="target">Target.</param>
+		/// <param name="config">Config.</param>
+		public KastHook(KastBox box, string target, KastConfiguration config){
+			Box = box;
+			Target = target;
+
+			try {
+				Option = KastHook.BuildKastHookOption(config.Assets["option"]);
+				Name = config.Assets["name"];
+			}catch(Exception e){
+				Defaults ();
+			}
+		}
+
+		/// <summary>
 		/// React the specified input, according to the KastHookOption
 		/// </summary>
 		/// <param name="input">Input.</param>
@@ -136,6 +154,30 @@ namespace Kast.General
 
 		public string Latest(){
 			return Box.Latest ();
+		}
+
+		public void Defaults(){
+			Name = "";
+			Option = KastHookOption.First;
+		}
+		/// <summary>
+		/// Builds a KastHookOption from a string. Expects it to be formatted in
+		/// such a way: "option {First|Last|InnerRemove|InnerKeep}"
+		/// </summary>
+		/// <param name="buildString">Build string.</param>
+		public static KastHookOption BuildKastHookOption(string buildString){
+			buildString = buildString.ToLower ();
+
+			if (buildString.Contains ("first"))
+				return KastHookOption.First;
+			else if (buildString.Contains ("last"))
+				return KastHookOption.Last;
+			else if (buildString.Contains ("innerremove"))
+				return KastHookOption.InnerRemove;
+			else if (buildString.Contains ("innerkeep"))
+				return KastHookOption.InnerKeep;
+
+			throw new Exception ("Not sure what you just tried to build.");
 		}
 	}
 }

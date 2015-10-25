@@ -48,6 +48,8 @@ namespace Kast.Feed
 			Source = source;
 			Destination = destination;
 			Option = option;
+
+			Name = "";
 		}
 
 		/// <summary>
@@ -61,7 +63,7 @@ namespace Kast.Feed
 			Source = source;
 			Destination = destination;
 			Option = option;
-			this.Name = name;
+			Name = name;
 		}
 
 		/// <summary>
@@ -132,6 +134,10 @@ namespace Kast.Feed
 		public void Defaults(){
 			Name = "";
 			Option = KastFeedOption.Last;
+		}
+
+		public string GetName(){
+			return Name;
 		}
 		/// <summary>
 		/// Builds a KastFeedOption from a string. Expects it to be formatted in

@@ -48,7 +48,36 @@ namespace Kast
 			Console.WriteLine ("K. Now the second one");
 			kh.React ("notServer /home");
 
-			Console.WriteLine ("Did all that go well? Sweet. Now just write the relay and we're about good to go :)");
+			Console.WriteLine ("Did all that go well? Sweet.");
+
+			Console.WriteLine ();
+			Console.WriteLine ();
+			Console.WriteLine ();
+
+			Console.WriteLine ("... okay. So, you've almost got yourself a practical server. Wanna make a relay?");
+			var kr = new KastRelay ();
+			Console.WriteLine ("Yikes. Okay. We have it... Let's add a box, hook, and feed to it.");
+
+			kr.AddComponent (kb);
+			kr.AddComponent (kh);
+			kr.AddComponent (kf);
+
+			Console.WriteLine ("Wanna... You know. Make it pulse?");
+			kr.Pulse ();
+
+			Console.WriteLine ("Are we still here? Woah. Okay. So... one last step. Dear god.");
+			Console.WriteLine ("Let's build a box from a string");
+			kr.AddComponent(new String[]{"box", "ls", "name myname arguments -R,-a"});
+
+			Console.WriteLine ("Can our new box play nicely with the other boxes?");
+			kr.Pulse ();
+
+			Console.WriteLine ("Let's sift through the ashes and see what happened to our poor box");
+			Console.WriteLine ("---------");
+			((KastBox)kr.GetComponentByName ("myname")).Buffer.ForEach (x => Console.WriteLine (x));
+			Console.WriteLine ("----------");
+
+			Console.WriteLine ("If you got here you're a lucky man. Okay! Now let's get that server up and running.");
 
 			Console.WriteLine ("The server is not currently finished. It will now \n" +
 				"just accept your connection and not do anything with it. ^C to kill.");
@@ -56,7 +85,7 @@ namespace Kast
 			tcpL.Start ();
 
 			for (; /*ever*/;)
-				tcpL.AcceptTcpClientAsync ();
+				;//tcpL.AcceptTcpClientAsync ();
 		}
 	}
 }

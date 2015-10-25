@@ -20,6 +20,12 @@ namespace Kast.General
 		/// Get the last element of the buffer of importance.
 		/// </summary>
 		string Latest();
+
+		/// <summary>
+		/// Get the name of the current KastComponent
+		/// </summary>
+		/// <returns>The name.</returns>
+		string GetName();
 	}
 }
 

@@ -44,7 +44,7 @@ namespace Kast.Base
 
 				// program arg1 arg2...
 				string[] programString = source [1].Split (' ');
-				KastConfiguration config = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
+				KastConfiguration config = new KastConfiguration (KastConfiguration.BuildAssets (source [2]));
 				return new KastBox(programString[0], config); 
 
 			}

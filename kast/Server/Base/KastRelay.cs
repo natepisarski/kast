@@ -44,6 +44,7 @@ namespace Kast.Base
 			ActiveBoxes = new List<KastBox>();
 			Feeds = new List<KastFeed> ();
 			Hooks = new List<KastHook> ();
+			Components = new List<IKastComponent> ();
 		}
 
 		/// <summary>
@@ -84,6 +85,18 @@ namespace Kast.Base
 			Components.Remove (component);
 		}
 			
+		/// <summary>
+		/// Return the first KastComponent with a given name
+		/// </summary>
+		/// <returns>The component by name.</returns>
+		/// <param name="name">Name.</param>
+		public IKastComponent GetComponentByName(string name){
+			foreach (IKastComponent component in Components)
+				if (component.GetName ().Equals (name))
+					return component;
+			return null;
+		}
+
 		/// <summary>
 		/// Pulse will cause all of the boxes to perform
 		/// their actions.

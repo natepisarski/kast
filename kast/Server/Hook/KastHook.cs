@@ -42,6 +42,8 @@ namespace Kast.General
 			Box = box; 
 			Target = target;
 			Option = option;
+
+			Name = "";
 		}
 
 		/// <summary>
@@ -54,6 +56,8 @@ namespace Kast.General
 			Box = new KastBox(processName);
 			Target = target;
 			Option = option;
+
+			Name = "";
 		}
 
 		/// <summary>
@@ -160,6 +164,11 @@ namespace Kast.General
 			Name = "";
 			Option = KastHookOption.First;
 		}
+
+		public string GetName(){
+			return Name;
+		}
+
 		/// <summary>
 		/// Builds a KastHookOption from a string. Expects it to be formatted in
 		/// such a way: "option {First|Last|InnerRemove|InnerKeep}"

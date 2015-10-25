@@ -47,7 +47,7 @@ namespace Kast.General
 		{
 			ProcessName = name;
 			ProcessArguments = new List<string> ();
-			this.Buffer = new List<string> ();
+			Defaults ();
 		}
 			
 		/// <summary>
@@ -58,6 +58,7 @@ namespace Kast.General
 		public KastBox(string procName, string name){
 			ProcessName = procName;
 			Name = name;
+			this.Buffer = new List<string> ();
 		}
 			
 		/// <summary>
@@ -68,6 +69,7 @@ namespace Kast.General
 		public KastBox(string procName, List<string> initialArgs){
 			Name = procName;
 			ProcessArguments = initialArgs;
+			this.Buffer = new List<string> ();
 		}
 
 		/// <summary>
@@ -80,6 +82,7 @@ namespace Kast.General
 			ProcessName = procName;
 			ProcessArguments = initialArgs;
 			Name = name;
+			this.Buffer = new List<string> ();
 		}
 
 		/// <summary>
@@ -88,6 +91,7 @@ namespace Kast.General
 		/// <param name="kc">Kc.</param>
 		public KastBox(string procName, KastConfiguration kc){
 			ProcessName = procName;
+			this.Buffer = new List<string> ();
 
 			try{
 				ProcessArguments = new List<string>(kc.Assets["arguments"].Split(','));
@@ -141,6 +145,11 @@ namespace Kast.General
 
 		public void Defaults(){
 			Name = "";
+			Buffer = new List<string> ();
+		}
+
+		public string GetName(){
+			return Name;
 		}
 	}
 }

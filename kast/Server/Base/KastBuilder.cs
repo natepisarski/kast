@@ -38,6 +38,7 @@ namespace Kast.Base
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source) {
+				source = Sections.ParseSections (Sections.RepairString (source), '+');
 
 				if(!Verify(source))
 					throw new Exception("Mishapen Box");
@@ -63,7 +64,7 @@ namespace Kast.Base
 
 		/// <summary>
 		/// Builds a Feed from a String.
-		/// Formatted: feed "source assets" "destination assets" assets
+		/// Formatted: feed |"source assets"| |"destination assets"| |assets|
 		/// Accepted assets: name option
 		/// Accepted options: First, All
 		/// </summary>
@@ -82,15 +83,15 @@ namespace Kast.Base
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source){
-
+				source = Sections.ParseSections (Sections.RepairString(source), '|');
 				if (!Verify (source))
 					throw new Exception ("Mishapen Feed");
 
 				var configuration = new KastConfiguration (KastConfiguration.BuildAssets(source [3]));
 
 				return new KastFeed (
-					(Box.RawBuild (source [1].Split(' ')) as KastBox),
-					(Box.RawBuild (source [2].Split(' ')) as KastBox),
+					(Box.Build (source [1].Split(' ')) as KastBox),
+					(Box.Build (source [2].Split(' ')) as KastBox),
 					configuration);
 			}
 		}
@@ -98,7 +99,7 @@ namespace Kast.Base
 		/// <summary>
 		/// Build a new hook from a string. The
 		/// string's expected format is:
-		/// hook "program args" target assets
+		/// hook |program args| target assets
 		/// Accepted assets: option, name
 		/// Accepted options: First, Last, InnerRemove, InnerKeep
 		/// </summary>
@@ -116,13 +117,14 @@ namespace Kast.Base
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source){
-			
+				source = Sections.ParseSections (Sections.RepairString (source), '|');
+
 				if (!Verify (source))
 					throw new Exception ("Mishapen Hook");
 
 				var configuration = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
 				return new KastHook (
-					(Box.RawBuild(source [1].Split (' ')) as KastBox),
+					(Box.Build(source [1].Split (' ')) as KastBox),
 					source [2], configuration);
 			}
 		}

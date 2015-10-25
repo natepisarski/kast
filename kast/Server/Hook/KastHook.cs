@@ -10,7 +10,7 @@ namespace Kast.General
 	/// </summary>
 	public class KastHook : IKastComponent
 	{
-		private KastBox Box {get; set; }
+		public KastBox Box {get; set; }
 
 		/// <summary>
 		/// Gets or sets the target, the value that will cause this

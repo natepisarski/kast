@@ -71,6 +71,14 @@ namespace Kast.Base
 		}
 
 		/// <summary>
+		/// Add the component from the string
+		/// </summary>
+		/// <param name="argument">Argument.</param>
+		public void AddComponent(string argument){
+			this.AddComponent (argument.Split (' '));
+		}
+
+		/// <summary>
 		/// Removes the component from the list of Active Components.
 		/// </summary>
 		/// <param name="component">Component.</param>

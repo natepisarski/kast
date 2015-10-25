@@ -108,6 +108,7 @@ namespace Kast.General
 		public string GetArguments(){
 			string collection = "";
 
+
 			foreach (string word in ProcessArguments)
 				collection += (word + " ");
 
@@ -146,6 +147,7 @@ namespace Kast.General
 		public void Defaults(){
 			Name = "";
 			Buffer = new List<string> ();
+			ProcessArguments = new List<string> ();
 		}
 
 		public string GetName(){

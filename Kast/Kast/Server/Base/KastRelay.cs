@@ -77,7 +77,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="argument">Argument.</param>
 		public void AddComponent(string argument){
-			this.AddComponent (argument.Split (' '));
+			AddComponent (argument.Split (' '));
 		}
 
 		/// <summary>
@@ -112,6 +112,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="name1">Name1.</param>
 		/// <param name="name2">Name2.</param>
+		/// <param name="config">The configuration to use for this Feed.</param>
 		public void BindComponents(string name1, string name2, KastConfiguration config){
 			IKastComponent item1 = GetComponentByName (name1);
 			IKastComponent item2 = GetComponentByName (name2);

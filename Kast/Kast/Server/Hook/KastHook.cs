@@ -48,48 +48,6 @@ namespace Kast.Server.Hook
 		}
 
 		/// <summary>
-		/// Makes a new KastHook using a process name to create a new box.
-		/// </summary>
-		/// <param name="processName">Process name.</param>
-		/// <param name="target">The string to match</param>
-		/// <param name="option">The option to use</param> 
-		public KastHook(string processName, string target, KastHookOption option){
-			Box = new KastBox(processName);
-			Target = target;
-			Option = option;
-
-			Name = "";
-		}
-
-		/// <summary>
-		/// Create a new Named Hook
-		/// </summary>
-		/// <param name="box">Box.</param>
-		/// <param name="target">Target.</param>
-		/// <param name="option">Option.</param>
-		/// <param name="name">Name.</param>
-		public KastHook (KastBox box, string target, KastHookOption option, string name){
-			Box = box;
-			Target = target;
-			Option = option;
-			Name = name;
-		}
-
-		/// <summary>
-		/// Create a new named hook from a string
-		/// </summary>
-		/// <param name="processName">Process name.</param>
-		/// <param name="target">Target.</param>
-		/// <param name="option">Option.</param>
-		/// <param name="name">Name.</param>
-		public KastHook(string processName, string target, KastHookOption option, string name){
-			Box = new KastBox (processName, name);
-			Target = target;
-			Option = option;
-			Name = name;
-		}
-
-		/// <summary>
 		/// Build a KastHook using a KastConfiguration
 		/// </summary>
 		/// <param name="box">Box.</param> 
@@ -126,7 +84,7 @@ namespace Kast.Server.Hook
 
 			case KastHookOption.InnerKeep:
 			case KastHookOption.InnerRemove:
-				if (Misc.Any (inputWords, (x) => x == Target)) {
+				if (Misc.Any (inputWords, x => x == Target)) {
 					if (Option == KastHookOption.InnerKeep)
 						Box.ProcessArguments = inputWords;
 					else{
@@ -143,10 +101,10 @@ namespace Kast.Server.Hook
 				break;
 			}
 
-			if (!Box.ProcessArguments.Equals (new List<string> ())) {
+			if (Box.ProcessArguments.Count >= 1) {
 				Box.ProcessBuffer ();
 				return true;
-			} else
+			}
 				return false;
 		}
 
@@ -180,14 +138,17 @@ namespace Kast.Server.Hook
 
 			if (buildString.Contains ("first"))
 				return KastHookOption.First;
-			else if (buildString.Contains ("last"))
+
+			if (buildString.Contains ("last"))
 				return KastHookOption.Last;
-			else if (buildString.Contains ("innerremove"))
+				
+			if (buildString.Contains ("innerremove"))
 				return KastHookOption.InnerRemove;
-			else if (buildString.Contains ("innerkeep"))
+
+			if (buildString.Contains ("innerkeep"))
 				return KastHookOption.InnerKeep;
 
-			throw new Exception ("Not sure what you just tried to build.");
+			throw new Exception ("BuildKastHookOption did not recognize: " + buildString);
 		}
 	}
 }

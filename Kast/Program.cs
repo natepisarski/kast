@@ -9,12 +9,10 @@ namespace Kast
 
 	//TODO: Add list capabilities to client (list running names)
 	//TODO: Add binding to feeds
-	//TODO: Add binding to hooks
 	//TODO: Fix all the documentation
 	//TODO: Handle all thrown exceptions
 	//TODO: Implement command builder interface for client
 	//TODO: Add logging to Server with variable log file
-	//TODO: Remove unneccessary constructors
 	//TODO: Remove needless KastConfiguration extensions
 	//TODO: Add unlist for named items
 	//TODO: Move Server stuff to the Kast.Server namespace

@@ -49,49 +49,15 @@ namespace Kast.Server.General
 			ProcessArguments = new List<string> ();
 			Defaults ();
 		}
-			
-		/// <summary>
-		/// Create a new named KastBox
-		/// </summary>
-		/// <param name="procName">Proc name.</param>
-		/// <param name="name">Name.</param>
-		public KastBox(string procName, string name){
-			ProcessName = procName;
-			Name = name;
-			this.Buffer = new List<string> ();
-		}
-			
-		/// <summary>
-		/// Create a new KastBox with the specified initial arguments
-		/// </summary>
-		/// <param name="procName">Proc name.</param>
-		/// <param name="initialArgs">Initial arguments.</param>
-		public KastBox(string procName, List<string> initialArgs){
-			Name = procName;
-			ProcessArguments = initialArgs;
-			this.Buffer = new List<string> ();
-		}
 
 		/// <summary>
-		/// Create a named KastBox with some initial args
+		/// Build the Box using a process name and configuration
 		/// </summary>
-		/// <param name="procName">Proc name.</param>
-		/// <param name="initialArgs">Initial arguments.</param>
-		/// <param name="name">Name.</param>
-		public KastBox(string procName, List<string> initialArgs, string name){
-			ProcessName = procName;
-			ProcessArguments = initialArgs;
-			Name = name;
-			this.Buffer = new List<string> ();
-		}
-
-		/// <summary>
-		/// Builds a KastBox using the KastConfiguration
-		/// </summary>
-		/// <param name="kc">Kc.</param>
+		/// <param name="procName">The name of the process</param>
+		/// <param name="kc">The KastConfiguration for this Box. Accepts: args, name</param>
 		public KastBox(string procName, KastConfiguration kc){
 			ProcessName = procName;
-			this.Buffer = new List<string> ();
+			Buffer = new List<string> ();
 			ProcessArguments = new List<string> ();
 			try{
 				if(kc.Assets.ContainsKey("args"))
@@ -108,20 +74,14 @@ namespace Kast.Server.General
 		/// </summary>
 		/// <returns>The arguments.</returns>
 		public string GetArguments(){
-			string collection = "";
-
-
-			foreach (string word in ProcessArguments)
-				collection += (word + " ");
-
-			return collection;
+			return Sections.RepairString (ProcessArguments.ToArray());
 		}
 
 		/// <summary>
 		/// Process the buffer, putting the result into the Buffer field.
 		/// </summary>
 		public void ProcessBuffer(){
-			ProcessStartInfo info = new ProcessStartInfo (ProcessName, GetArguments ());
+			var info = new ProcessStartInfo (ProcessName, GetArguments ());
 
 			info.RedirectStandardOutput = true;
 			info.UseShellExecute = false;

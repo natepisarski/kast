@@ -53,20 +53,6 @@ namespace Kast.Server.Feed
 		}
 
 		/// <summary>
-		/// Create a new named KastFeed.
-		/// </summary>
-		/// <param name="source">Source.</param>
-		/// <param name="destination">Destination.</param>
-		/// <param name="option">Option.</param>
-		/// <param name="name">Name.</param>
-		public KastFeed(KastBox source, KastBox destination, KastFeedOption option, string name){
-			Source = source;
-			Destination = destination;
-			Option = option;
-			Name = name;
-		}
-
-		/// <summary>
 		/// Create a new KastFeed from a KastConfiguration
 		/// </summary>
 		/// <param name="source">Source.</param>
@@ -122,7 +108,7 @@ namespace Kast.Server.Feed
 		public List<string> GetDestinationOutput(){
 			return Destination.Buffer;
 		}
-
+			
 		public void PulseReact(){
 			Feed ();
 		}
@@ -139,6 +125,7 @@ namespace Kast.Server.Feed
 		public string GetName(){
 			return Name;
 		}
+
 		/// <summary>
 		/// Builds a KastFeedOption from a string. Expects it to be formatted in
 		/// such a way: "option {All|Last}"

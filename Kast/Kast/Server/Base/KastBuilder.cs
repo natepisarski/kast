@@ -123,7 +123,7 @@ namespace Kast.Server.Base
 					source [2], configuration);
 			}
 		}
-
+			
 		/// <summary>
 		/// Builds a KastComponent, depending on 
 		/// the first word supplied. Can be: box, hook, feed.
@@ -137,7 +137,7 @@ namespace Kast.Server.Base
 			else if (source [0].Equals ("feed"))
 				return Feed.Build (source);
 
-			throw new Exception ("What are you building?");
+			throw new Exception ("Received request to build: " + source[0] + " but I don't know how!");
 		}
 	}
 }

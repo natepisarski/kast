@@ -45,9 +45,8 @@ namespace Kast.Server.General
 		/// Return the full array minus the first element
 		/// </summary>
 		/// <param name="list">List.</param>
-		/// <param name="start">Start.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static List<T> Tail<T>(T[] list, int start){
+		/// <typeparam name="T">The type of this list.</typeparam>
+		public static List<T> Tail<T>(T[] list){
 			return Subsequence (list, 1, list.Length);
 		}
 			

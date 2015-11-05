@@ -17,17 +17,17 @@ namespace Kast.Server
 		/// <summary>
 		/// A list of all the input that this server has ever gotten.
 		/// </summary>
-		private List<string> AllInput {get; set;}
+		List<string> AllInput {get; set;}
 
 		/// <summary>
 		/// The port to listen to (defaults to 4206)
 		/// </summary>
-		private int Port { get; set; }
+		int Port { get; set; }
 
 		/// <summary>
 		/// The address to listen for
 		/// </summary>
-		private IPAddress Address { get; set; }
+		IPAddress Address { get; set; }
 
 		/// <summary>
 		/// A boolean set up to determine whether input has
@@ -38,7 +38,7 @@ namespace Kast.Server
 		/// <summary>
 		/// The last time output was collected
 		/// </summary>
-		private int LastIndex { get; set; }
+		int LastIndex { get; set; }
 
 		/// <summary>
 		/// Set up the servitor with the default settings

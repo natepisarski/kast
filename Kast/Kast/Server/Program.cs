@@ -12,9 +12,9 @@ namespace Kast
 {
 	public class Program
 	{
-		private Servitor MainServitor {get; set;}
-		private KastRelay Relay { get; set; }
-		private int TickDelay { get; set; }
+		Servitor MainServitor {get; set;}
+		KastRelay Relay { get; set; }
+		int TickDelay { get; set; }
 
 		/// <summary>
 		/// Create a new Server, listening on the default port
@@ -26,13 +26,13 @@ namespace Kast
 			Relay = new KastRelay();
 			TickDelay = 1000;
 		}
-
+			
 		/// <summary>
 		/// Starts the server.
 		/// </summary>
 		public void Start()
 		{
-			Thread servitorThread = new Thread(new ThreadStart(MainServitor.Start));
+			var servitorThread = new Thread(new ThreadStart(MainServitor.Start));
 			servitorThread.Start();
 
 			Console.WriteLine ("The server is now listening");
@@ -40,9 +40,11 @@ namespace Kast
 			{
 				Thread.Sleep(TickDelay);
 
+				// Add all the new input from the client to the relay
 				if (MainServitor.Changed)
 					MainServitor.Collect ().ForEach (x => Relay.AddComponent (x.Split (' ')));
 
+				// Activate the relay
 				Relay.Pulse ();
 			}
 		}

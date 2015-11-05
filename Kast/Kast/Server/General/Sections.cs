@@ -32,33 +32,44 @@ namespace Kast.Server.General
 			// The final collection
 			var collection = new List<string> ();
 
-			foreach(char c in text.ToCharArray()){
+			foreach(char c in text){
 
+				// Escaped? Add this character no matter what
 				if (escaped) {
 					escaped = false;
 					selection += c;
 					continue;
 				}
-					
+
+				// This is an escape character? Escape the next one
 				if (c.Equals ('\\')) {
 					escaped = true;
 					continue;
 				}
 
-				if (collecting && c.Equals (delim)) { // Stop collecting this selection
+				// Stop collecting this selection
+				if (collecting && c.Equals (delim)) {
 					collection.Add (selection);
 					selection = "";
 					collecting = false;
 					continue;
-				} else if (!collecting && c.Equals (delim)) { // Start collecting this selection
+				} 
+
+				// Start collecting this selection
+				if (!collecting && c.Equals (delim)) {
 					collecting = true;
 					continue;
-				} else if (c.Equals (' ') && !collecting) { // Word's done? Add it
+				}
+
+				// Words done? Clear selection. Otherwise, add the char.
+				if (c.Equals (' ') && !collecting) {
 					collection.Add (selection);
 					selection = "";
 				} else
 					selection += c;
 			}
+
+			// Remove any empty strings that this found.
 			collection.RemoveAll (x => x.Equals (""));
 
 			return collection.ToArray ();
@@ -72,7 +83,7 @@ namespace Kast.Server.General
 		/// <param name="splitOn">Split on.</param>
 		public static List<string> EscapeSplit(string text, char splitOn){
 			// The total collection
-			List<string> collection = new List<string> ();
+			var collection = new List<string> ();
 
 			// The current selection
 			string selection = "";

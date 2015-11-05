@@ -111,6 +111,8 @@ namespace Kast.Server.General
 
 				selection += c;
 			}
+			collection.Add (selection);
+			collection.RemoveAll (x => x.Equals (""));
 
 			return collection;
 		}

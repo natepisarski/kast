@@ -102,9 +102,9 @@ namespace Kast
 			// The server is running now
 			new Thread (new ThreadStart (server.Start)).Start ();
 
-			Client.Program.SendData ("box ls +name myThing+");
-			Client.Program.SendData ("box ls +name myOtherThing+");
-			Client.Program.SendData ("feed |@myThing| |@myOtherThing| |name myName|");
+			Client.Program.SendData ("box echo +args hello name hello+");
+			Client.Program.SendData ("box notify-send +name writer+");
+			Client.Program.SendData ("feed |@hello| |@writer| |name testFeed|");
 
 			Console.WriteLine ("Successful test");
 		}

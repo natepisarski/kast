@@ -101,9 +101,13 @@ namespace Kast.Server.Base
 		/// <returns>The component by name.</returns>
 		/// <param name="name">Name.</param>
 		public IKastComponent GetComponentByName(string name){
-			foreach (IKastComponent component in Components)
+			foreach (IKastComponent component in Components) {
+				if (component == null)
+					continue;
+
 				if (component.GetName ().Equals (name))
 					return component;
+			}
 			return null;
 		}
 
@@ -127,10 +131,30 @@ namespace Kast.Server.Base
 		}
 
 		/// <summary>
+		/// Fill in futures if possible
+		/// </summary>
+		public void FillFutures(){
+			// Currently only feeds support Futures
+			foreach(KastFeed item in Feeds){
+				if (item.Source is KastFuture) {
+					var possibleFuture = GetComponentByName ((item.Source as KastFuture).Name);
+					item.Source = possibleFuture ?? item.Source;
+				}
+				if (item.Destination is KastFuture) {
+					var possibleFuture = GetComponentByName ((item.Destination as KastFuture).Name);
+					item.Destination = possibleFuture ?? item.Source;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Pulse will cause all of the boxes to perform
 		/// their actions.
 		/// </summary>
 		public void Pulse(){
+
+			// Attempt to satisfy any futures
+			FillFutures ();
 
 			// Make the boxes and feeds react
 			ActiveBoxes.ForEach (box => box.PulseReact ());
@@ -147,6 +171,15 @@ namespace Kast.Server.Base
 					if (hook != otherHook)
 						hook.React (otherHook.Latest ());
 			
+		}
+
+		/// <summary>
+		/// Print the status of the Relay
+		/// </summary>
+		public void PrintStatus(){
+			Console.WriteLine (ActiveBoxes.Count + " boxes.");
+			Console.WriteLine (Hooks.Count + " hooks");
+			Console.WriteLine (Feeds.Count + " feeds");
 		}
 	}
 }

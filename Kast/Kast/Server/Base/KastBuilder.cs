@@ -20,6 +20,17 @@ namespace Kast.Server.Base
 	{
 
 		/// <summary>
+		/// Simply return a future with the name after the @
+		/// Expected format for "future" is @futureName
+		/// </summary>
+		/// <returns>The future.</returns>
+		/// <param name="future">Future.</param>
+		public static KastFuture BuildFuture(string future){
+			var futureName = new string (Misc.Tail (future.ToCharArray ()).ToArray ());
+			return new KastFuture (futureName);
+		}
+
+		/// <summary>
 		/// Creates a KastBox from the String.
 		/// Formatted: box program +assets+
 		/// Accepted assets: args "comma,separated,args", name "name"
@@ -46,7 +57,7 @@ namespace Kast.Server.Base
 
 				// program arg1 arg2...
 				string[] programString = source [1].Split (' ');
-				KastConfiguration config = new KastConfiguration (KastConfiguration.BuildAssets (source [2]));
+				var config = new KastConfiguration (KastConfiguration.BuildAssets (source [2]));
 				return new KastBox(programString[0], config); 
 
 			}
@@ -83,10 +94,19 @@ namespace Kast.Server.Base
 
 				var configuration = new KastConfiguration (KastConfiguration.BuildAssets(source [3]));
 
-				return new KastFeed (
-					(Box.Build (source [1].Split(' ')) as KastBox),
-					(Box.Build (source [2].Split(' ')) as KastBox),
-					configuration);
+				IKastComponent sourceComp;
+				IKastComponent destinationComp;
+
+				sourceComp =  (source [1] [0].Equals ('@')) ?
+					BuildFuture (source [1]) : 
+					Box.Build (source [1].Split (' '));
+
+				destinationComp = (source [2] [0].Equals ('@')) ?
+					BuildFuture (source [2]) :
+					Box.Build (source [2].Split (' '));
+
+
+				return new KastFeed (sourceComp, destinationComp, configuration);
 			}
 		}
 

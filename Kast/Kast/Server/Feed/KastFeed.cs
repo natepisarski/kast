@@ -17,13 +17,13 @@ namespace Kast.Server.Feed
 		/// Destination
 		/// </summary>
 		/// <value>The source.</value>
-		public KastBox Source { get; set; }
+		public IKastComponent Source { get; set; }
 
 		/// <summary>
 		/// The destination. Source's output is supplied here.
 		/// </summary>
 		/// <value>The destination.</value>
-		public KastBox Destination{ get; set; } 
+		public IKastComponent Destination{ get; set; } 
 
 		/// <summary>
 		/// Determines the behavior of this KastFeed.
@@ -43,7 +43,7 @@ namespace Kast.Server.Feed
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
 		/// <param name="option">The type of Feed this will assign</param>
-		public KastFeed (KastBox source, KastBox destination, KastFeedOption option)
+		public KastFeed (IKastComponent source, KastBox destination, KastFeedOption option)
 		{
 			Source = source;
 			Destination = destination;
@@ -58,7 +58,7 @@ namespace Kast.Server.Feed
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
 		/// <param name="config">Config.</param>
-		public KastFeed(KastBox source, KastBox destination, KastConfiguration config){
+		public KastFeed(IKastComponent source, IKastComponent destination, KastConfiguration config){
 			Source = source;
 			Destination = destination;
 			try {
@@ -75,28 +75,42 @@ namespace Kast.Server.Feed
 		/// the KastFeedOption
 		/// </summary>
 		public void Feed(){
-			Source.ProcessBuffer ();
+			KastBox lSource;
+			KastBox lDestination;
 
-			// Set the command line arguments appropriately
-			switch(Option){
-			case KastFeedOption.All:
-				Destination.ProcessArguments = Source.Buffer;
-				break;
+			// Do nothing if the comonents are futures
+			if (Source is KastFuture || Destination is KastFuture)
+				return;
 
-			case KastFeedOption.Last:
-				Destination.ProcessArguments = new List<string> ();
-				Destination.ProcessArguments.Add (Source.Buffer.FindLast (x => true));
-				break;
-			}
+			lSource = Source as KastBox;
+			lDestination = Destination as KastBox;
 
-			Destination.ProcessBuffer ();
+				lSource.ProcessBuffer ();
+
+				// Set the command line arguments appropriately
+				switch (Option) {
+				case KastFeedOption.All:
+					lDestination.ProcessArguments = lSource.Buffer;
+					break;
+
+				case KastFeedOption.Last:
+					lDestination.ProcessArguments = new List<string> ();
+					lDestination.ProcessArguments.Add (lSource.Buffer.FindLast (x => true));
+					break;
+				}
+
+				lDestination.ProcessBuffer ();
+
 		}
 
 		/// <summary>
 		/// Make the Source the Destination, and vice-versa
 		/// </summary>
 		public void Flip(){
-			KastBox temp = Source;
+			if (Source is KastFuture || Destination is KastFuture)
+				return;
+
+			var temp = Source as KastBox;
 
 			Source = Destination;
 			Destination = temp;
@@ -106,7 +120,10 @@ namespace Kast.Server.Feed
 		/// Gets the destination output.
 		/// </summary>
 		public List<string> GetDestinationOutput(){
-			return Destination.Buffer;
+			if(!(Destination is KastFuture))
+				return (Destination as KastBox).Buffer;
+
+			return null;
 		}
 			
 		public void PulseReact(){

@@ -75,10 +75,13 @@ namespace Kast.Server
 				// It has not changed, because we just looked.
 				Changed = false;
 
+				// The index when this was triggered
+				int oldIndex = LastIndex;
+
 				// The last index is now. We just accessed it.
 				LastIndex = AllInput.Count - 1;
 
-				return General.Misc.Subsequence(AllInput, LastIndex, AllInput.Count);
+				return General.Misc.Subsequence(AllInput, oldIndex, AllInput.Count);
 			}
 		}
 

@@ -8,7 +8,6 @@ namespace Kast
 	/*Master TODO list (in no particular order)*/
 
 	//TODO: Add list capabilities to client (list running names)
-	//TODO: Add binding to feeds
 	//TODO: Fix all the documentation
 	//TODO: Handle all thrown exceptions
 	//TODO: Implement command builder interface for client
@@ -67,6 +66,8 @@ namespace Kast
 
 		public static void Main (string[] args)
 		{
+
+			//*
 			Console.WriteLine ();
 
 			// Help the user if they need it
@@ -83,13 +84,29 @@ namespace Kast
 				Console.WriteLine ("Unrecognized command. Exiting kast. Use \"kast help\" for help.");
 			} else {
 				if(args[0].Equals("server")){
-					Kast.Program server = new Kast.Program();
+					Kast.Server.Program server = new Kast.Server.Program();
 					server.Start ();
 				} else {
 					Client.Program.main (Misc.Subsequence (args, 1, args.Length).ToArray());
 				}
 			}
-				
+        //*/
+		}
+
+		/// <summary>
+		/// Until the project is mature, I will be using this to test the program
+		/// </summary>
+		public static void test(){
+			Kast.Server.Program server = new Kast.Server.Program ();
+
+			// The server is running now
+			new Thread (new ThreadStart (server.Start)).Start ();
+
+			Client.Program.SendData ("box ls +name myThing+");
+			Client.Program.SendData ("box ls +name myOtherThing+");
+			Client.Program.SendData ("feed |@myThing| |@myOtherThing| |name myName|");
+
+			Console.WriteLine ("Successful test");
 		}
 	}
 }

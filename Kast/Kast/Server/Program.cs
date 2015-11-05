@@ -8,7 +8,7 @@ using Kast.Server.Feed;
 using Kast.Server.General;
 using Kast.Server;
 
-namespace Kast
+namespace Kast.Server
 {
 	public class Program
 	{
@@ -41,8 +41,10 @@ namespace Kast
 				Thread.Sleep(TickDelay);
 
 				// Add all the new input from the client to the relay
-				if (MainServitor.Changed)
-					MainServitor.Collect ().ForEach (x => Relay.AddComponent (x.Split (' ')));
+				if (MainServitor.Changed) {
+					var commands = MainServitor.Collect ();
+					commands.ForEach (x => Relay.AddComponent (x.Split (' ')));
+				}
 
 				// Activate the relay
 				Relay.Pulse ();

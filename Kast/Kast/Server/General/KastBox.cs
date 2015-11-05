@@ -3,7 +3,7 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Kast.General
+namespace Kast.Server.General
 {
 	/// <summary>
 	/// Kast Boxes wrap a process and arguments. The box can then

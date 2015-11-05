@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 
 using System.Net;
 
 using System.Net.Sockets;
 
-namespace Kast
+namespace Kast.Server
 {
 	/// <summary>
 	/// Servitor is the true server of the program. It 

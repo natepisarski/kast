@@ -3,10 +3,10 @@
 using System.Collections.Generic;
 using System.Threading;
 
-using Kast.Base;
-using Kast.Feed;
-using Kast.General;
-
+using Kast.Server.Base;
+using Kast.Server.Feed;
+using Kast.Server.General;
+using Kast.Server;
 
 namespace Kast
 {

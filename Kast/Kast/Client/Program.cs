@@ -3,7 +3,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-using Kast.General;
+using Kast.Server.General;
+
 namespace Kast.Client
 {
 	public class Program

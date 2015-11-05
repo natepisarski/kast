@@ -1,8 +1,8 @@
 ﻿using System;
-using Kast.Base;
-using Kast.General;
+using Kast.Server.Base;
+using Kast.Server.General;
 
-namespace Kast.General
+namespace Kast.Server.Base
 {
 	public interface IBuilder {
 		bool Verify(string[] toVerify);

@@ -1,9 +1,9 @@
 ﻿using System;
-using Kast.General;
+using Kast.Server.General;
 
 using System.Collections.Generic;
 
-namespace Kast.Feed
+namespace Kast.Server.Feed
 {
 	/// <summary>
 	/// KastFeeds control two KastBoxes, feeding the output from one into the other.

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Kast.Base;
-using Kast.Feed;
-using Kast.General;
+using Kast.Server.Feed;
+using Kast.Server.General;
+using Kast.Server.Hook;
 
-namespace Kast.Base
+namespace Kast.Server.Base
 {
 	/// <summary>
 	/// The relay is the backbone of the Kast system. It controls

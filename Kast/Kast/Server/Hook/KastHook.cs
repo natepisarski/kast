@@ -1,8 +1,9 @@
 ﻿using System;
 
 using System.Collections.Generic;
+using Kast.Server.General;
 
-namespace Kast.General
+namespace Kast.Server.Hook
 {
 	/// <summary>
 	/// Hooks will capture the input of any command that matches

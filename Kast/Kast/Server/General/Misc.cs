@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Kast.General
+namespace Kast.Server.General
 {
 	/// <summary>
 	/// General functions. These are functions that are used throughout the Kast

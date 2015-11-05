@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kast.General
+namespace Kast.Server.Hook
 {
 	/// <summary>
 	/// Sets the options for how Hooks should monitor

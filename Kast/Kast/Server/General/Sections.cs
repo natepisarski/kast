@@ -26,19 +26,34 @@ namespace Kast.General
 			// Test to see if we need to find another | to flush selection
 			bool collecting = false;
 
+			// If the escape character \ appears, the next character is added to the selection
+			bool escaped = false;
+
 			// The final collection
 			var collection = new List<string> ();
 
 			foreach(char c in text.ToCharArray()){
-				if (collecting && c.Equals (delim)) {
+
+				if (escaped) {
+					escaped = false;
+					selection += c;
+					continue;
+				}
+					
+				if (c.Equals ('\\')) {
+					escaped = true;
+					continue;
+				}
+
+				if (collecting && c.Equals (delim)) { // Stop collecting this selection
 					collection.Add (selection);
 					selection = "";
 					collecting = false;
 					continue;
-				} else if (!collecting && c.Equals (delim)) {
+				} else if (!collecting && c.Equals (delim)) { // Start collecting this selection
 					collecting = true;
 					continue;
-				} else if (c.Equals (' ') && !collecting) {
+				} else if (c.Equals (' ') && !collecting) { // Word's done? Add it
 					collection.Add (selection);
 					selection = "";
 				} else
@@ -47,6 +62,46 @@ namespace Kast.General
 			collection.RemoveAll (x => x.Equals (""));
 
 			return collection.ToArray ();
+		}
+
+		/// <summary>
+		/// Split text, listening to the escape character.
+		/// </summary>
+		/// <returns>The split.</returns>
+		/// <param name="text">Text.</param>
+		/// <param name="splitOn">Split on.</param>
+		public static List<string> EscapeSplit(string text, char splitOn){
+			// The total collection
+			List<string> collection = new List<string> ();
+
+			// The current selection
+			string selection = "";
+
+			// Whether or not the escape character preceded this
+			bool escaped = false;
+
+			foreach (char c in text) {
+				if (escaped) {
+					escaped = false;
+					selection += c;
+					continue;
+				}
+
+				if (c.Equals ('\\')) {
+					escaped = true;
+					continue;
+				}
+
+				if (c.Equals (splitOn)) {
+					collection.Add (selection);
+					selection = "";
+					continue;
+				}
+
+				selection += c;
+			}
+
+			return collection;
 		}
 
 		/// <summary>

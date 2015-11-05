@@ -97,6 +97,20 @@ namespace Kast.General
 
 			return new Tuple<T[], T[]>(firstList.ToArray(), secondList.ToArray());
 		}
+
+		/// <summary>
+		/// Flatten the specified list.
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static string Flatten(string[] list){//TODO: WORK WITH IENUMERABLE
+			string coll = "";
+
+			foreach (string item in list)
+				coll += item;
+
+			return coll;
+		}
 	}
 }
 

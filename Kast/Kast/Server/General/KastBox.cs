@@ -92,9 +92,11 @@ namespace Kast.General
 		public KastBox(string procName, KastConfiguration kc){
 			ProcessName = procName;
 			this.Buffer = new List<string> ();
-
+			ProcessArguments = new List<string> ();
 			try{
-				ProcessArguments = new List<string>(kc.Assets["arguments"].Split(','));
+				if(kc.Assets.ContainsKey("args"))
+					ProcessArguments = Sections.EscapeSplit(kc.Assets["args"], ',');
+
 				Name = kc.Assets["name"];
 			}catch(Exception e){
 				Defaults ();
@@ -147,7 +149,7 @@ namespace Kast.General
 		public void Defaults(){
 			Name = "";
 			Buffer = new List<string> ();
-			ProcessArguments = new List<string> ();
+			ProcessArguments = ProcessArguments ?? new List<string> ();
 		}
 
 		public string GetName(){

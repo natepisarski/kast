@@ -60,6 +60,8 @@ namespace Kast.Base
 				Hooks.Add (component as KastHook);
 
 			Components.Add (component);
+
+			Console.WriteLine ("Component added to relay");
 		}
 
 		/// <summary>
@@ -103,6 +105,24 @@ namespace Kast.Base
 				if (component.GetName ().Equals (name))
 					return component;
 			return null;
+		}
+
+		/// <summary>
+		/// Places two named components in a feed.
+		/// </summary>
+		/// <param name="name1">Name1.</param>
+		/// <param name="name2">Name2.</param>
+		public void BindComponents(string name1, string name2, KastConfiguration config){
+			IKastComponent item1 = GetComponentByName (name1);
+			IKastComponent item2 = GetComponentByName (name2);
+
+			// Weed out all possible sources of error.
+			if (item1 == null || item2 == null || (!(item1 is KastBox)) || (!(item2 is KastBox)))
+				return;
+
+			Feeds.Add (new KastFeed (item1 as KastBox,
+				item2 as KastBox,
+				config));
 		}
 
 		/// <summary>

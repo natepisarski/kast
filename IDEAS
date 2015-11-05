@@ -1,3 +1,0 @@
-Since this project is in development, let's Brainstorm on the Architecture of kast for a second.
-
-* Configuration for arguments (Marked? Named? Option?) with a ConfigurationBuilder

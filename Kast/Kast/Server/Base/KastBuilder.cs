@@ -20,7 +20,7 @@ namespace Kast.Base
 
 		/// <summary>
 		/// Creates a KastBox from the String.
-		/// Formatted: box program {assets}
+		/// Formatted: box program +assets+
 		/// Accepted assets: args "comma,separated,args", name "name"
 		/// </summary>
 		public static class Box {
@@ -49,22 +49,12 @@ namespace Kast.Base
 				return new KastBox(programString[0], config); 
 
 			}
-
-			/// <summary>
-			/// Build a box from raw components
-			/// </summary>
-			/// <returns>The build.</returns>
-			/// <param name="source">Source.</param>
-			public static IKastComponent RawBuild(string[] source){
-				List<string> argList = new List<string>(source);
-				argList.Insert (0, "box");
-				return Build (argList.ToArray ());
-			}
 		}
 
 		/// <summary>
 		/// Builds a Feed from a String.
 		/// Formatted: feed |"source assets"| |"destination assets"| |assets|
+		/// Optionally: feed |@sourceName| |@destinationName| |assets|
 		/// Accepted assets: name option
 		/// Accepted options: First, All
 		/// </summary>
@@ -83,7 +73,10 @@ namespace Kast.Base
 			/// </summary>
 			/// <param name="source">Source.</param>
 			public static IKastComponent Build(string[] source){
+
+				// Get the sections in the format [feed, source, destination, assets]
 				source = Sections.ParseSections (Sections.RepairString(source), '|');
+
 				if (!Verify (source))
 					throw new Exception ("Mishapen Feed");
 
@@ -104,6 +97,7 @@ namespace Kast.Base
 		/// Accepted options: First, Last, InnerRemove, InnerKeep
 		/// </summary>
 		public static class Hook  {
+
 			/// <summary>
 			/// Expects output in the form of "hook named name target "program args""
 			/// </summary>

@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace Kast.Server.General
 {
+	/// <summary>
+	/// A KastComponent is the basic building block of the Kast system.
+	/// The relay, and compound Kast types (Feeds, Hooks) work with KastComponents,
+	/// which define a minimal set of functionality for Kast objects.
+	/// </summary>
 	public interface IKastComponent
 	{
 		/// <summary>

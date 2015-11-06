@@ -9,7 +9,14 @@ namespace Kast.Server.Feed
 	/// </summary>
 	public enum KastFeedOption
 	{
+		/// <summary>
+		/// Feed the entire output every time
+		/// </summary>
 		All,
+
+		/// <summary>
+		/// Feed just the last output
+		/// </summary>
 		Last
 	}
 }

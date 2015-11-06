@@ -2,14 +2,18 @@
 
 using System.Collections.Generic;
 using System.Threading;
+using System.Net;
 
 using Kast.Server.Base;
-using Kast.Server.Feed;
-using Kast.Server.General;
 using Kast.Server;
 
 namespace Kast.Server
 {
+	/// <summary>
+	/// The server program creates a servitor which
+	/// listens to a specified port. Using output from the
+	/// servitor, the relay of all running KastComponents is managed.
+	/// </summary>
 	public class Program
 	{
 		Servitor MainServitor {get; set;}
@@ -17,8 +21,8 @@ namespace Kast.Server
 		int TickDelay { get; set; }
 
 		/// <summary>
-		/// Create a new Server, listening on the default port
-		/// to listen on is 4206
+		/// Create a new Server, listening to the
+		/// default port of 4206.
 		/// </summary>
 		public Program ()
 		{
@@ -26,7 +30,16 @@ namespace Kast.Server
 			Relay = new KastRelay();
 			TickDelay = 1000;
 		}
-			
+
+		/// <summary>
+		/// Initialize the Program given an IP Adress and a port.
+		/// </summary>
+		/// <param name="address">The address to listen to</param>
+		/// <param name="port">The port to listen to</param>
+		public Program(IPAddress address, int port){
+			MainServitor = new Servitor (address, port);
+		}
+
 		/// <summary>
 		/// Starts the server.
 		/// </summary>

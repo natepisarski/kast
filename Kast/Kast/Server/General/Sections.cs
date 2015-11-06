@@ -16,8 +16,8 @@ namespace Kast.Server.General
 		/// Example: { these are words. |this is a string|. |this has a \| in it |
 		/// </summary>
 		/// <returns>The sections.</returns>
-		/// <param name="text">Text.</param>
-		/// <param name="delim">Delim. </param>
+		/// <param name="text">The text to partition</param>
+		/// <param name="delim">The character defining partitions</param>
 		public static string[] ParseSections(string text, char delim){
 
 			// What is being collected right now
@@ -79,8 +79,8 @@ namespace Kast.Server.General
 		/// Split text, listening to the escape character.
 		/// </summary>
 		/// <returns>The split.</returns>
-		/// <param name="text">Text.</param>
-		/// <param name="splitOn">Split on.</param>
+		/// <param name="text">The text to split on.</param>
+		/// <param name="splitOn">The character to split this string on.</param>
 		public static List<string> EscapeSplit(string text, char splitOn){
 			// The total collection
 			var collection = new List<string> ();
@@ -92,26 +92,34 @@ namespace Kast.Server.General
 			bool escaped = false;
 
 			foreach (char c in text) {
+
+				//Escaped? Add it no matter what.
 				if (escaped) {
 					escaped = false;
 					selection += c;
 					continue;
 				}
 
+				//Escape character? Ignore it an enable escaped.
 				if (c.Equals ('\\')) {
 					escaped = true;
 					continue;
 				}
 
+				// Found your delimiter? Push the buffer and start collecting again
 				if (c.Equals (splitOn)) {
 					collection.Add (selection);
 					selection = "";
 					continue;
 				}
 
+				// Anything else? Push to the buffer
 				selection += c;
 			}
+
+			// Push any last-minute adata
 			collection.Add (selection);
+
 			collection.RemoveAll (x => x.Equals (""));
 
 			return collection;
@@ -120,7 +128,7 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Turn an array of strings back into the original string
 		/// </summary>
-		/// <param name="toRepair">To repair.</param>
+		/// <param name="toRepair">The array of strings to flatten</param>
 		public static string RepairString(string[] toRepair){
 			string collection = "";
 

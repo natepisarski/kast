@@ -3,7 +3,9 @@
 namespace Kast.Server.General
 {
 	/// <summary>
-	/// KastFuture is a class that names 
+	/// KastFuture is a class that names a box that
+	/// should at some point enter the relay. The relay
+	/// will then fill in the future with a KastBox.
 	/// </summary>
 	public class KastFuture : IKastComponent
 	{

@@ -14,22 +14,23 @@ namespace Kast.Server.Base
 	public class KastRelay
 	{
 		/// <summary>
-		/// Boxes declared as independant workers
+		/// A reference to every individual box (not boxes
+		/// that are defined only within Compound Kast Components)
 		/// </summary>
-		/// <value>The active boxes.</value>
-		private List<KastBox> ActiveBoxes {get; set;}
+		/// <value>All independant boxes</value>
+		List<KastBox> ActiveBoxes {get; set;}
 
 		/// <summary>
-		/// Feeds
+		/// A reference to every running feed.
 		/// </summary>
-		/// <value>The feeds.</value>
-		private List<KastFeed> Feeds { get; set; }
+		/// <value>All feeds</value>
+		List<KastFeed> Feeds { get; set; }
 
 		/// <summary>
-		/// Hooks
+		/// A reference to every running hook
 		/// </summary>
-		/// <value>The hooks.</value>
-		private List<KastHook> Hooks { get; set; }
+		/// <value>All hooks</value>
+		List<KastHook> Hooks { get; set; }
 
 		/// <summary>
 		/// Every component in the relay
@@ -50,7 +51,7 @@ namespace Kast.Server.Base
 		/// <summary>
 		/// Add a new KastComponent to the list of active components
 		/// </summary>
-		/// <param name="component">Component.</param>
+		/// <param name="component">The component to add</param>
 		public void AddComponent(IKastComponent component){
 			if (component is KastBox)
 				ActiveBoxes.Add (component as KastBox);
@@ -61,21 +62,23 @@ namespace Kast.Server.Base
 
 			Components.Add (component);
 
+			//TODO: Change to Logger call
 			Console.WriteLine ("Component added to relay");
 		}
 
 		/// <summary>
-		/// Add a component to the relay with raw information
+		/// Add a component to the relay with raw information.
+		/// Usually supplied by the Kast Client.
 		/// </summary>
-		/// <param name="args">Arguments.</param>
+		/// <param name="args">The arguments describing the component</param>
 		public void AddComponent(string[] args){
 			AddComponent (KastBuilder.Build (args));
 		}
 
 		/// <summary>
-		/// Add the component from the string
+		/// Add the component from the string.
 		/// </summary>
-		/// <param name="argument">Argument.</param>
+		/// <param name="argument">Add component from a single string</param>
 		public void AddComponent(string argument){
 			AddComponent (argument.Split (' '));
 		}
@@ -83,7 +86,7 @@ namespace Kast.Server.Base
 		/// <summary>
 		/// Removes the component from the list of Active Components.
 		/// </summary>
-		/// <param name="component">Component.</param>
+		/// <param name="component">The component to remove from the system</param>
 		public void RemoveComponent(IKastComponent component){
 			if (component is KastBox)
 				ActiveBoxes.Remove (component as KastBox);
@@ -94,12 +97,20 @@ namespace Kast.Server.Base
 
 			Components.Remove (component);
 		}
-			
+
+		/// <summary>
+		/// Remove a named component
+		/// </summary>
+		/// <param name="name">The name to remove</param>
+		public void RemoveComponent(string name){
+			Components.RemoveAll (x => x.GetName ().Equals (name));
+		}
+
 		/// <summary>
 		/// Return the first KastComponent with a given name
 		/// </summary>
-		/// <returns>The component by name.</returns>
-		/// <param name="name">Name.</param>
+		/// <returns>The first component found with this name</returns>
+		/// <param name="name">The name to look up</param>
 		public IKastComponent GetComponentByName(string name){
 			foreach (IKastComponent component in Components) {
 				if (component == null)
@@ -114,8 +125,8 @@ namespace Kast.Server.Base
 		/// <summary>
 		/// Places two named components in a feed.
 		/// </summary>
-		/// <param name="name1">Name1.</param>
-		/// <param name="name2">Name2.</param>
+		/// <param name="name1">The component with this name to match</param>
+		/// <param name="name2">The component with this name to match</param>
 		/// <param name="config">The configuration to use for this Feed.</param>
 		public void BindComponents(string name1, string name2, KastConfiguration config){
 			IKastComponent item1 = GetComponentByName (name1);
@@ -125,9 +136,12 @@ namespace Kast.Server.Base
 			if (item1 == null || item2 == null || (!(item1 is KastBox)) || (!(item2 is KastBox)))
 				return;
 
-			Feeds.Add (new KastFeed (item1 as KastBox,
-				item2 as KastBox,
-				config));
+			var newFeed = new KastFeed (item1 as KastBox,
+				              item2 as KastBox,
+				              config);
+
+			Feeds.Add (newFeed);
+			Components.Add (newFeed);
 		}
 
 		/// <summary>

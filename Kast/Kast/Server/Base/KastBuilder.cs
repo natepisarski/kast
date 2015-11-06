@@ -23,8 +23,8 @@ namespace Kast.Server.Base
 		/// Simply return a future with the name after the @
 		/// Expected format for "future" is @futureName
 		/// </summary>
-		/// <returns>The future.</returns>
-		/// <param name="future">Future.</param>
+		/// <returns>A future with the given name</returns>
+		/// <param name="future">The name to give this future</param>
 		public static KastFuture BuildFuture(string future){
 			var futureName = new string (Misc.Tail (future.ToCharArray ()).ToArray ());
 			return new KastFuture (futureName);
@@ -40,7 +40,7 @@ namespace Kast.Server.Base
 			/// Verify that the string is in the proper format to create a Box.
 			/// The expectedformat for a Box is "box |named {name}| process args"
 			/// </summary>
-			/// <param name="toVerify">To verify.</param>
+			/// <param name="toVerify">The string to verify</param>
 			public static bool Verify(string[] toVerify){
 				return toVerify[0].Equals ("box") && toVerify.Length >= 2;
 			}
@@ -48,7 +48,7 @@ namespace Kast.Server.Base
 			/// <summary>
 			///  Build the box itself
 			/// </summary>
-			/// <param name="source">Source.</param>
+			/// <param name="source">Source lines given by the command line.</param>
 			public static IKastComponent Build(string[] source) {
 				source = Sections.ParseSections (Sections.RepairString (source), '+');
 
@@ -75,7 +75,7 @@ namespace Kast.Server.Base
 			/// Checks that the current string is formatted in a way which can build
 			/// a Hook. The expected format is "feed named x "source arguments" "destination arguments"
 			/// </summary>
-			/// <param name="toVerify">To verify.</param>
+			/// <param name="toVerify">The string to check</param>
 			public static bool Verify(string[] toVerify){
 				return toVerify [0].Equals ("feed") && toVerify.Length >= 3;
 			}
@@ -83,7 +83,7 @@ namespace Kast.Server.Base
 			/// <summary>
 			/// Create a new Feed given a list of arguments
 			/// </summary>
-			/// <param name="source">Source.</param>
+			/// <param name="source">Source lines given by the command line.</param>
 			public static IKastComponent Build(string[] source){
 
 				// Get the sections in the format [feed, source, destination, assets]
@@ -122,7 +122,7 @@ namespace Kast.Server.Base
 			/// <summary>
 			/// Expects output in the form of "hook named name target "program args""
 			/// </summary>
-			/// <param name="source">Source.</param>
+			/// <param name="source">Source lines given by the command line.</param>
 			public static bool Verify(string[] source){
 				return source [0].Equals ("hook") && source.Length >= 3;
 			}
@@ -130,7 +130,7 @@ namespace Kast.Server.Base
 			/// <summary>
 			/// Build the Hook itself
 			/// </summary>
-			/// <param name="source">Source.</param>
+			/// <param name="source">Source lines given by the command line.</param>
 			public static IKastComponent Build(string[] source){
 				source = Sections.ParseSections (Sections.RepairString (source), '|');
 
@@ -156,7 +156,7 @@ namespace Kast.Server.Base
 		/// Builds a KastComponent, depending on 
 		/// the first word supplied. Can be: box, hook, feed.
 		/// </summary>
-		/// <param name="source">Source.</param>
+		/// <param name="source">Source lines given by the command line.</param>
 		public static IKastComponent Build(string[] source){
 			if (source [0].Equals ("box"))
 				return Box.Build (source);

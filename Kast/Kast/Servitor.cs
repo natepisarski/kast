@@ -8,9 +8,10 @@ using System.Net.Sockets;
 namespace Kast.Server
 {
 	/// <summary>
-	/// Servitor is the true server of the program. It 
-	/// asynchronously accepts clients on port 4206 and sends
-	/// their data to a receiving channel as a string.
+	/// Servitor is the true server for
+	/// the program. It accepts input on a port, and
+	/// keeps track of the last time it was accessed so
+	/// that it can return just the new data.
 	/// </summary>
 	public class Servitor 
 	{
@@ -25,7 +26,7 @@ namespace Kast.Server
 		int Port { get; set; }
 
 		/// <summary>
-		/// The address to listen for
+		/// The address to listen for (defaults to loopback)
 		/// </summary>
 		IPAddress Address { get; set; }
 
@@ -55,14 +56,15 @@ namespace Kast.Server
 		/// <summary>
 		/// Create a new servitor given an IPAdress and a port.
 		/// </summary>
-		/// <param name="address">Address.</param>
-		/// <param name="port">Port.</param>
+		/// <param name="address">The IP address to listen to</param>
+		/// <param name="port">The port to listen on</param>
 		public Servitor(IPAddress address, int port){
 			Address = address;
 			AllInput = new List<string> ();
 			LastIndex = 0;
 			Port = port;
 		}
+
 		/// <summary>
 		/// Gets all the input that the servitor has received since the last
 		/// time it got any.
@@ -98,7 +100,8 @@ namespace Kast.Server
 				TcpClient client = listener.AcceptTcpClient();
 
 				NetworkStream nwStream = client.GetStream();
-				byte[] buffer = new byte[client.ReceiveBufferSize];
+
+				var buffer = new byte[client.ReceiveBufferSize];
 
 				int bytesRead = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
 

@@ -17,19 +17,19 @@ namespace Kast.Server.Hook
 		/// Gets or sets the target, the value that will cause this
 		/// Hook's Box to act.
 		/// </summary>
-		/// <value>The target.</value>
+		/// <value>The value which will cause this hook to fire</value>
 		public string Target { get; set; }
 
 		/// <summary>
 		/// Define how this KastHook should react to input
 		/// </summary>
-		/// <value>The option.</value>
+		/// <value>Either First, Last, InnerRemove, or InnerKeep</value>
 		public KastHookOption Option { get; set; }
 
 		/// <summary>
 		/// Name the Box so that it can be accessed from the Relay.
 		/// </summary>
-		/// <value>The name.</value>
+		/// <value>Any string that names this instance.</value>
 		public string Name {get; set;}
 
 		/// <summary>
@@ -50,9 +50,9 @@ namespace Kast.Server.Hook
 		/// <summary>
 		/// Build a KastHook using a KastConfiguration
 		/// </summary>
-		/// <param name="box">Box.</param> 
-		/// <param name="target">Target.</param>
-		/// <param name="config">Config.</param>
+		/// <param name="box">The box to capture.</param> 
+		/// <param name="target">The string that will make this hook fire</param>
+		/// <param name="config">Configuration assets, such as name and option.</param>
 		public KastHook(IKastComponent box, string target, KastConfiguration config){
 			Box = box;
 			Target = target;
@@ -68,7 +68,7 @@ namespace Kast.Server.Hook
 		/// <summary>
 		/// React the specified input, according to the KastHookOption
 		/// </summary>
-		/// <param name="input">Input.</param>
+		/// <param name="input">The input to react on. Usually other Component's output.</param>
 		public bool React(string input){
 			if (Box is KastFuture)
 				return false;
@@ -137,7 +137,7 @@ namespace Kast.Server.Hook
 		/// Builds a KastHookOption from a string. Expects it to be formatted in
 		/// such a way: "option {First|Last|InnerRemove|InnerKeep}"
 		/// </summary>
-		/// <param name="buildString">Build string.</param>
+		/// <param name="buildString">The string which contains an option</param>
 		public static KastHookOption BuildKastHookOption(string buildString){
 			buildString = buildString.ToLower ();
 

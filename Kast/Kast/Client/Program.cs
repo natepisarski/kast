@@ -17,9 +17,9 @@ namespace Kast.Client
 		/// <summary>
 		/// Sends data to a specified IPAdress and port. 
 		/// </summary>
-		/// <param name="data">Data.</param>
-		/// <param name="adress">Adress.</param>
-		/// <param name="port">Port.</param>
+		/// <param name="data">The data to send as a string</param>
+		/// <param name="adress">The address to send the data to</param>
+		/// <param name="port">The port to send the data to</param>
 		public static void SendData(string data, IPAddress adress, int port) {
 			// Data buffer for incoming data.
 			byte[] bytes = new byte[1024];
@@ -56,7 +56,7 @@ namespace Kast.Client
 		/// <summary>
 		/// Sends data to the default IP and port
 		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <param name="message">The message to send</param>
 		public static void SendData(string message){
 			SendData (message, IPAddress.Loopback, 4206);
 		}

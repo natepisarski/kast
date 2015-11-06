@@ -16,33 +16,34 @@ namespace Kast.Server.Feed
 		/// The source box. These arguments will be fed into
 		/// Destination
 		/// </summary>
-		/// <value>The source.</value>
+		/// <value>The box that will be fed into destination</value>
 		public IKastComponent Source { get; set; }
 
 		/// <summary>
 		/// The destination. Source's output is supplied here.
 		/// </summary>
-		/// <value>The destination.</value>
+		/// <value>The box that will be fed by the source</value>
 		public IKastComponent Destination{ get; set; } 
 
 		/// <summary>
 		/// Determines the behavior of this KastFeed.
 		/// </summary>
-		/// <value>The option.</value>
+		/// <value>An Option. Can be All or Last.</value>
 		public KastFeedOption Option { get; set; }
 
 		/// <summary>
 		/// Name the Box so that it can be accessed from the Relay.
 		/// </summary>
-		/// <value>The name.</value>
+		/// <value>Any string that names this box.</value>
 		public string Name {get; set;}
 
 		/// <summary>
-		/// Creates a new feed. 
+		/// Creates a new feed from a source component, a destination component, and an
+		/// option.
 		/// </summary>
-		/// <param name="source">Source.</param>
-		/// <param name="destination">Destination.</param>
-		/// <param name="option">The type of Feed this will assign</param>
+		/// <param name="source">The source box</param>
+		/// <param name="destination">The destination box</param>
+		/// <param name="option">The option to use. All or Last.</param>
 		public KastFeed (IKastComponent source, KastBox destination, KastFeedOption option)
 		{
 			Source = source;
@@ -53,14 +54,15 @@ namespace Kast.Server.Feed
 		}
 
 		/// <summary>
-		/// Create a new KastFeed from a KastConfiguration
+		/// Create a new KastFeed from a source, destination, and configuration
 		/// </summary>
-		/// <param name="source">Source.</param>
-		/// <param name="destination">Destination.</param>
-		/// <param name="config">Config.</param>
+		/// <param name="source">The source box</param>
+		/// <param name="destination">The destination box</param>
+		/// <param name="config">The configuratin</param>
 		public KastFeed(IKastComponent source, IKastComponent destination, KastConfiguration config){
 			Source = source;
 			Destination = destination;
+
 			try {
 				Option = BuildKastFeedOption(config.Assets["option"]);
 				Name = config.Assets["name"];
@@ -147,7 +149,7 @@ namespace Kast.Server.Feed
 		/// Builds a KastFeedOption from a string. Expects it to be formatted in
 		/// such a way: "option {All|Last}"
 		/// </summary>
-		/// <param name="buildString">Build string.</param>
+		/// <param name="buildString">A string containing an option</param>
 		public static KastFeedOption BuildKastFeedOption(string buildString){
 			return buildString.ToLower ().Contains ("all") ? KastFeedOption.All : KastFeedOption.Last;
 		}

@@ -15,10 +15,10 @@ namespace Kast.Server.General
 		/// starts at the starting index (inclusive) and will collect length
 		/// elements
 		/// </summary>
-		/// <param name="list">List.</param>
-		/// <param name="start">Start.</param>
-		/// <param name="length">Length.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		/// <param name="list">The list to operate on</param>
+		/// <param name="start">The starting INDEX</param>
+		/// <param name="length">How many elements to colect for.</param>
+		/// <typeparam name="T">What type of list this is.</typeparam>
 		public static List<T> Subsequence<T>(List<T> list, int start, int length){
 			var collection = new List<T>();
 
@@ -27,16 +27,15 @@ namespace Kast.Server.General
 
 			return collection;
 		}
-
-		//TODO: Implement for IEnumerable<T: Sized>
+			
 
 		/// <summary>
 		/// Subsequence implemented for arrays
 		/// </summary>
-		/// <param name="list">List.</param>
-		/// <param name="start">Start.</param>
-		/// <param name="length">Length.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		/// <param name="list">The list to operate on</param>
+		/// <param name="start">The starting INDEX</param>
+		/// <param name="length">How many elements to colect for.</param>
+		/// <typeparam name="T">What type of list this is.</typeparam>
 		public static List<T> Subsequence<T>(T[] list, int start, int length){
 			return Misc.Subsequence (new List<T> (list), start, length);
 		}
@@ -44,8 +43,8 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Return the full array minus the first element
 		/// </summary>
-		/// <param name="list">List.</param>
-		/// <typeparam name="T">The type of this list.</typeparam>
+		/// <param name="list">The list to operate on</param>
+		/// <typeparam name="T">The type of list to work on</typeparam>
 		public static List<T> Tail<T>(T[] list){
 			return Subsequence (list, 1, list.Length);
 		}
@@ -54,9 +53,9 @@ namespace Kast.Server.General
 		/// Test to see if anything in this list satisfies the predicate. This is a 
 		/// built-in function of .NET's Enumerable; however, Mono does not support it yet.
 		/// </summary>
-		/// <param name="list">List.</param>
-		/// <param name="predicate">Predicate.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		/// <param name="list">The list to test</param>
+		/// <param name="predicate">The predicate to move over the list.</param>
+		/// <typeparam name="T">The type of list that is being used.</typeparam>
 		public static bool Any<T>(List<T> list, Predicate<T> predicate){
 			return list.FindAll (predicate).Count > 0;
 		}
@@ -64,9 +63,9 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Any implemented for arrays
 		/// </summary>
-		/// <param name="list">List.</param>
-		/// <param name="predicate">Predicate.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		/// <param name="list">The list to test</param>
+		/// <param name="predicate">The predicate to move over the list.</param>
+		/// <typeparam name="T">The type of list that is being used.</typeparam>
 		public static bool Any<T>(T[] list, Predicate<T> predicate){
 			return Misc.Any (new List<T> (list), predicate);
 		}
@@ -76,8 +75,8 @@ namespace Kast.Server.General
 		/// array's even elements (0, 2, ...) and the second is made up
 		/// of the list's odd-indexed elements (1, 3, ...)
 		/// </summary>
-		/// <param name="originalList">Original list.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		/// <param name="originalList">The list to unbind from</param>
+		/// <typeparam name="T">The type of this list.</typeparam>
 		public static Tuple<T[], T[]> Unbind<T>(T[] originalList){
 			var firstList = new List<T> ();
 			var secondList = new List<T> ();
@@ -100,8 +99,8 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Flatten the specified list.
 		/// </summary>
-		/// <param name="list">List.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		/// <param name="list">The list to flatten</param>
+		/// <typeparam name="T">The type of this list</typeparam>
 		public static string Flatten(string[] list){//TODO: WORK WITH IENUMERABLE
 			string coll = "";
 

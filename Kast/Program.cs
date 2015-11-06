@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Threading;
+using System.Net;
+
 using Kast.Server.General;
 
 namespace Kast
 {
 	/*Master TODO list (in no particular order)*/
 
-	//TODO: Allow no assets
 	//TODO: Add list capabilities to client (list running names)
 	//TODO: Fix all the documentation
 	//TODO: Handle all thrown exceptions
 	//TODO: Implement command builder interface for client
 	//TODO: Add logging to Server with variable log file
 	//TODO: Add unlist for named items
-	//TODO: Move Server stuff to the Kast.Server namespace
 	//TODO: Add KastConfiguration to the server (logfile location, port)
 	//TODO: Implement basic logger module
 	//TODO: Add port configuration to the client
 	//TODO: Add config file support for server and client (consider server block and client block)
+	//TODO: Add "ObjectExists" exception for name clashes
 
 	/* Very future TODOS */
 	//TODO: Add scripting support (read arguments one-by-one as kast-client commands)
@@ -31,7 +32,7 @@ namespace Kast
 		/// <summary>
 		/// Get help for a specific part of kast.
 		/// </summary>
-		/// <param name="part">Part.</param>
+		/// <param name="part">The part of the program to get help for. Can be server or client.</param>
 		public static string Help(string part){
 			string helpMsg = "";
 
@@ -53,16 +54,21 @@ namespace Kast
 		}
 
 		/// <summary>
-		/// General help
+		/// General help. This happens if no input is given on the command line.
 		/// </summary>
 		public static string Help(){
 			string helpMsg = "";
+
 			helpMsg += "Welcome to kast help.\n";
 			helpMsg += "For more general help, type \"kast help server\" or \"kast help client\"\n";
 
 			return helpMsg;
 		}
 
+		/// <summary>
+		/// Either creates a server in this thread, or sends data to a running server.
+		/// </summary>
+		/// <param name="args">The command-line arguments.</param>
 		public static void Main (string[] args)
 		{
 			//*
@@ -82,7 +88,7 @@ namespace Kast
 				Console.WriteLine ("Unrecognized command. Exiting kast. Use \"kast help\" for help.");
 			} else {
 				if(args[0].Equals("server")){
-					Kast.Server.Program server = new Kast.Server.Program();
+					var server = new Kast.Server.Program ();
 					server.Start ();
 				} else {
 					// Send everything but "client"

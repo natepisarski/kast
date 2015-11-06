@@ -27,13 +27,13 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Name the Box so that it can be accessed from the Relay.
 		/// </summary>
-		/// <value>The name.</value>
+		/// <value>The name for the box</value>
 		public string Name {get; set;}
 
 		/// <summary>
 		/// Gets this Box's buffer
 		/// </summary>
-		/// <value>The buffer.</value>
+		/// <value>The output of this KastBox</value>
 		public List<string> Buffer { 
 			get;
 			set;
@@ -42,7 +42,7 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Creates a new KastBox, with the name as the process's name
 		/// </summary>
-		/// <param name="name">Name</param> The name of the process that this Box will manage
+		/// <param name="name">The name of the process that this Box will manage</param>
 		public KastBox (string name)
 		{
 			ProcessName = name;
@@ -72,7 +72,7 @@ namespace Kast.Server.General
 		/// <summary>
 		/// Get the arguments for this box as a String
 		/// </summary>
-		/// <returns>The arguments.</returns>
+		/// <returns>The arguments for this box</returns>
 		public string GetArguments(){
 			return Sections.RepairString (ProcessArguments.ToArray());
 		}

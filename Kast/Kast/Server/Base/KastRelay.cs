@@ -134,7 +134,7 @@ namespace Kast.Server.Base
 		/// Fill in futures if possible
 		/// </summary>
 		public void FillFutures(){
-			// Currently only feeds support Futures
+			// Replace feed futures
 			foreach(KastFeed item in Feeds){
 				if (item.Source is KastFuture) {
 					var possibleFuture = GetComponentByName ((item.Source as KastFuture).Name);
@@ -143,6 +143,14 @@ namespace Kast.Server.Base
 				if (item.Destination is KastFuture) {
 					var possibleFuture = GetComponentByName ((item.Destination as KastFuture).Name);
 					item.Destination = possibleFuture ?? item.Source;
+				}
+			}
+
+			// Replace hook futures
+			foreach (KastHook item in Hooks) {
+				if (item.Box is KastFuture) {
+					var possibleFuture = GetComponentByName ((item.Box as KastFuture).Name);
+					item.Box = possibleFuture ?? item.Box;
 				}
 			}
 		}

@@ -113,7 +113,7 @@ namespace Kast.Server.Base
 		/// <summary>
 		/// Build a new hook from a string. The
 		/// string's expected format is:
-		/// hook |program args| target assets
+		/// hook |program args| |target| |assets|
 		/// Accepted assets: option, name
 		/// Accepted options: First, Last, InnerRemove, InnerKeep
 		/// </summary>
@@ -138,8 +138,16 @@ namespace Kast.Server.Base
 					throw new Exception ("Mishapen Hook");
 
 				var configuration = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
+
+				IKastComponent hook;
+
+				// This Hook is a future!
+				hook = (source [1] [0].Equals ('@')) ?
+					BuildFuture (source [1]) :
+					Box.Build (source [1].Split (' '));
+
 				return new KastHook (
-					(Box.Build(source [1].Split (' ')) as KastBox),
+					hook,
 					source [2], configuration);
 			}
 		}

@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Threading;
-using System.Collections.Generic;
 using Kast.Server.General;
 
 namespace Kast
 {
 	/*Master TODO list (in no particular order)*/
 
+	//TODO: Allow no assets
 	//TODO: Add list capabilities to client (list running names)
 	//TODO: Fix all the documentation
 	//TODO: Handle all thrown exceptions
 	//TODO: Implement command builder interface for client
 	//TODO: Add logging to Server with variable log file
-	//TODO: Remove needless KastConfiguration extensions
 	//TODO: Add unlist for named items
 	//TODO: Move Server stuff to the Kast.Server namespace
 	//TODO: Add KastConfiguration to the server (logfile location, port)
@@ -66,7 +65,6 @@ namespace Kast
 
 		public static void Main (string[] args)
 		{
-
 			//*
 			Console.WriteLine ();
 
@@ -87,6 +85,7 @@ namespace Kast
 					Kast.Server.Program server = new Kast.Server.Program();
 					server.Start ();
 				} else {
+					// Send everything but "client"
 					Client.Program.main (Misc.Subsequence (args, 1, args.Length).ToArray());
 				}
 			}
@@ -102,9 +101,9 @@ namespace Kast
 			// The server is running now
 			new Thread (new ThreadStart (server.Start)).Start ();
 
-			Client.Program.SendData ("box echo +args hello name hello+");
+			Client.Program.SendData ("box echo +args hello,msg name hello+");
 			Client.Program.SendData ("box notify-send +name writer+");
-			Client.Program.SendData ("feed |@hello| |@writer| |name testFeed|");
+			Client.Program.SendData ("hook |box notify-send +args \"hi\"+| |hello| |name myName|");
 
 			Console.WriteLine ("Successful test");
 		}

@@ -11,7 +11,7 @@ namespace Kast.Server.Hook
 	/// </summary>
 	public class KastHook : IKastComponent
 	{
-		public KastBox Box {get; set; }
+		public IKastComponent Box {get; set; }
 
 		/// <summary>
 		/// Gets or sets the target, the value that will cause this
@@ -53,7 +53,7 @@ namespace Kast.Server.Hook
 		/// <param name="box">Box.</param> 
 		/// <param name="target">Target.</param>
 		/// <param name="config">Config.</param>
-		public KastHook(KastBox box, string target, KastConfiguration config){
+		public KastHook(IKastComponent box, string target, KastConfiguration config){
 			Box = box;
 			Target = target;
 
@@ -70,39 +70,44 @@ namespace Kast.Server.Hook
 		/// </summary>
 		/// <param name="input">Input.</param>
 		public bool React(string input){
+			if (Box is KastFuture)
+				return false;
+
+			var lBox = Box as KastBox;
+
 			var inputWords = new List<string>(input.Split(' '));
 
 			// Clear the old argument list
-			Box.ProcessArguments = new List<string> ();
+			lBox.ProcessArguments = new List<string> ();
 
 			switch(Option){
 
 			case KastHookOption.First:
 				if (inputWords [0].Equals (Target))
-					Box.ProcessArguments = Misc.Subsequence (inputWords, 1, inputWords.Count);
+					lBox.ProcessArguments = Misc.Subsequence (inputWords, 1, inputWords.Count);
 				break;
 
 			case KastHookOption.InnerKeep:
 			case KastHookOption.InnerRemove:
 				if (Misc.Any (inputWords, x => x == Target)) {
 					if (Option == KastHookOption.InnerKeep)
-						Box.ProcessArguments = inputWords;
+						lBox.ProcessArguments = inputWords;
 					else{
 						// removes EVERY occurence.
 						inputWords.RemoveAll (x => x == Target);
-						Box.ProcessArguments = inputWords;
+						lBox.ProcessArguments = inputWords;
 					}
 				}
 				break;
 
 			case KastHookOption.Last:
 				if (inputWords [inputWords.Count - 1].Equals (Target))
-					Box.ProcessArguments = Misc.Subsequence (inputWords, 0, inputWords.Count - 2);
+					lBox.ProcessArguments = Misc.Subsequence (inputWords, 0, inputWords.Count - 2);
 				break;
 			}
 
-			if (Box.ProcessArguments.Count >= 1) {
-				Box.ProcessBuffer ();
+			if (lBox.ProcessArguments.Count >= 1) {
+				lBox.ProcessBuffer ();
 				return true;
 			}
 				return false;

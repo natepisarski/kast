@@ -56,7 +56,14 @@ namespace Kast.Server
 				// Add all the new input from the client to the relay
 				if (MainServitor.Changed) {
 					var commands = MainServitor.Collect ();
-					commands.ForEach (x => Relay.AddComponent (x.Split (' ')));
+					foreach (string command in commands) {
+						var commandWords = command.Split (' ');
+
+						if (commandWords [0].Equals ("unlist"))
+							Relay.RemoveComponent (commandWords [1]);
+						else
+							Relay.AddComponent (commandWords);
+					}
 				}
 
 				// Activate the relay

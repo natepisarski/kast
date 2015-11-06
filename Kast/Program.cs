@@ -9,13 +9,10 @@ namespace Kast
 	/*Master TODO list (in no particular order)*/
 
 	//TODO: Add list capabilities to client (list running names)
-	//TODO: Fix all the documentation
 	//TODO: Handle all thrown exceptions
 	//TODO: Implement command builder interface for client
 	//TODO: Add logging to Server with variable log file
-	//TODO: Add unlist for named items
 	//TODO: Add KastConfiguration to the server (logfile location, port)
-	//TODO: Implement basic logger module
 	//TODO: Add port configuration to the client
 	//TODO: Add config file support for server and client (consider server block and client block)
 	//TODO: Add "ObjectExists" exception for name clashes
@@ -46,8 +43,9 @@ namespace Kast
 				helpMsg += "kast client box [command] +{args comma,separated,args} {name boxName}\n";
 				helpMsg += "kast client feed |[box syntax]| |[box syntax]| |{name feedName} {option all OR last}\n";
 				helpMsg += "kast client hook |[box syntax]| target |{name hookName} {option first OR last OR innerRemove OR innerKeep}\n";
-
+				helpMsg += "kast client unlist name\n";
 				helpMsg += "In places where [box syntax] is accepted, @name is accepted to reference a currently running box in the relay";
+
 			} else return Help();
 
 			return helpMsg;

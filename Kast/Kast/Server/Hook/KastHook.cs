@@ -72,8 +72,8 @@ namespace Kast.Server.Hook
 			MasterConfig = masterConfig;
 			Log = log;
 			try {
-				Option = KastHook.BuildKastHookOption(config.Assets["option"]);
-				Name = config.Assets["name"];
+				Option = KastHook.BuildKastHookOption(config.Get("option"));
+				Name = config.Get("name");
 			}catch(Exception e){
 				Defaults ();
 			}

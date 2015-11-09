@@ -56,7 +56,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="toVerify">The string to verify</param>
 		public bool VerifyBox(string[] toVerify){
-			return toVerify[0].Equals (MasterConfig.Assets["command_box"]) && toVerify.Length >= 2;
+			return toVerify[0].Equals (MasterConfig.Get("command_box")) && toVerify.Length >= 2;
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Kast.Server.Base
 			source = Sections.ParseSections (Sections.RepairString (source), '+');
 
 			if(!VerifyBox(source))
-				throw new Exception(MasterConfig.Assets["message_misshapen_box"]);
+				throw new Exception(MasterConfig.Get("message_misshapen_box"));
 
 			// program arg1 arg2...
 			string[] programString = source [1].Split (' ');
@@ -84,7 +84,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="toVerify">The string to check</param>
 		public bool VerifyFeed(string[] toVerify){
-			return toVerify [0].Equals (MasterConfig.Assets["command_feed"]) && toVerify.Length >= 3;
+			return toVerify [0].Equals (MasterConfig.Get("command_feed")) && toVerify.Length >= 3;
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Kast.Server.Base
 			source = Sections.ParseSections (Sections.RepairString(source), '|');
 
 			if (!VerifyFeed (source))
-				throw new Exception (MasterConfig.Assets["message_misshapen_feed"]);
+				throw new Exception (MasterConfig.Get("message_misshapen_feed"));
 
 			var configuration = new KastConfiguration (KastConfiguration.BuildAssets(source [3]));
 
@@ -123,7 +123,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="source">Source lines given by the command line.</param>
 		public bool VerifyHook(string[] source){
-			return source [0].Equals (MasterConfig.Assets["command_hook"]) && source.Length >= 3;
+			return source [0].Equals (MasterConfig.Get("command_hook")) && source.Length >= 3;
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ namespace Kast.Server.Base
 			source = Sections.ParseSections (Sections.RepairString (source), '|');
 
 			if (!VerifyHook (source))
-				throw new Exception (MasterConfig.Assets["message_misshapen_hook"]);
+				throw new Exception (MasterConfig.Get("message_misshapen_hook"));
 
 			var configuration = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
 
@@ -162,14 +162,14 @@ namespace Kast.Server.Base
 		/// <param name="source">Source lines given by the command line.</param>
 		public IKastComponent Build(string[] source){
 			Console.WriteLine ("Asked to build: " + Sections.RepairString (source));
-			if (source [0].Equals (MasterConfig.Assets["command_box"]))
+			if (source [0].Equals (MasterConfig.Get("command_box")))
 				return BuildBox (source);
-			else if (source [0].Equals (MasterConfig.Assets["command_hook"]))
+			else if (source [0].Equals (MasterConfig.Get("command_hook")))
 				return BuildHook (source);
-			else if (source [0].Equals (MasterConfig.Assets["command_feed"]))
+			else if (source [0].Equals (MasterConfig.Get("command_feed")))
 				return BuildFeed (source);
 
-					throw new Exception (MasterConfig.Assets["message_improper_build"] + source[0]);
+			throw new Exception (MasterConfig.Get("message_improper_build") + source[0]);
 		}
 	}
 }

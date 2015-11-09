@@ -10,14 +10,18 @@ namespace Kast
 
 	//TODO: Add list capabilities to client (list running names)
 	//TODO: Handle all thrown exceptions
+	//TODO: Fix the ton of port commands in the configuration file
+	//TODO: Replace all Logger parameters with Logger constructor
 	//TODO: Implement command builder interface for client
 	//TODO: Make the configuration file more forgiving (missing key? Use default value)
 	//TODO: Add "ObjectExists" exception for name clashes
 	//TODO: Change Builder around to use inheritence of a Builder
+	//TODO: Make an automatic generator for the default assets
 
 	/* Very future TODOS */
 	//TODO: Add scripting support (read arguments one-by-one as kast-client commands)
 	//TODO: Add GUI support for client
+	//TODO: Generate HTML documentation
 
 	/// <summary>
 	/// The entry point for the Kast program.
@@ -94,7 +98,7 @@ namespace Kast
 			else
 				masterConfig = new KastConfiguration(KastConfiguration.DefaultConfiguration ());
 
-			var logger = new Logger (masterConfig.Assets["server_log"]);
+			var logger = new Logger (masterConfig.Get("server_log"));
 
 			if(args[0].Equals("server")){
 				var server = new Server.Program (masterConfig, logger);
@@ -114,8 +118,9 @@ namespace Kast
 	public static void test(){
 			//*
 			KastConfiguration master = new KastConfiguration ();
-			master.Assets = KastConfiguration.DefaultConfiguration ();
-			Logger log = new Logger (master.Assets ["server_log"]);
+			master = new KastConfiguration(KastConfiguration.DefaultConfiguration ());
+		
+			Logger log = new Logger (master.Get("server_log"));
 
 			Kast.Server.Program server = new Kast.Server.Program (master, log);
 			Kast.Client.Program client = new Kast.Client.Program (master, log);

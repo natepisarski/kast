@@ -7,7 +7,7 @@ namespace Kast.Server.General
 {
 	public class KastConfiguration
 	{
-		public Dictionary<string, string> Assets;
+		Dictionary<string, string> Assets;
 
 		/// <summary>
 		/// Initialize a blank KastConfiguration instance
@@ -96,9 +96,11 @@ namespace Kast.Server.General
 		public static Dictionary<string, string> DefaultConfiguration(){
 			var assets = new Dictionary<string, string> ();
 
+			//BEGIN AUTOMATICALLY GENERATED CODE
 			// Message Blocks
 			assets.Add ("message_server_start", "Server now listening on port");
 			assets.Add ("message_added", "Component added to the relay");
+			assets.Add ("message_builder_started", "Command builder started");
 
 			// Diagnostics
 			assets.Add ("message_boxes", "Boxes.");
@@ -131,8 +133,46 @@ namespace Kast.Server.General
 			assets.Add ("server_port", "4206");
 			assets.Add ("server_address", "127.0.0.1");
 			assets.Add ("server_log", "/tmp/kast_server.log");
+			//END AUTOMATICALLY GENERATED CODE
 
 			return assets;
+		}
+
+		/// <summary>
+		/// Get the default value for the specified key. If it's not found
+		/// in the list of default values. If it's not found, null takes its place.
+		/// </summary>
+		/// <returns>The default argument</returns>
+		/// <param name="key">The key to look up</param>
+		public static string RetrieveDefault(string key){
+			try{
+			return KastConfiguration.DefaultConfiguration () [key];
+			} catch(KeyNotFoundException k){
+				Console.WriteLine (key + " not found in default values");
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the asset, or supplies the default value
+		/// </summary>
+		/// <returns>The asset's value/returns>
+		/// <param name="asset">The asset to look up</param>
+		public string Get(string asset){
+			try {
+				return this.Assets[asset];
+			} catch(KeyNotFoundException k){
+				return KastConfiguration.RetrieveDefault (asset);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance has  message in its keys
+		/// </summary>
+		/// <returns><c>true</c> if this instance has message; otherwise, <c>false</c>.</returns>
+		/// <param name="message">The message to search for</param>
+		public bool Has(string message){
+			return Assets.ContainsKey (message);
 		}
 	}
 }

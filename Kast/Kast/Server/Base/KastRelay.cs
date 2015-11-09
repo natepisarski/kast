@@ -84,7 +84,7 @@ namespace Kast.Server.Base
 
 			Components.Add (component);
 
-			Log.Log (MasterConfig.Assets["message_added"]);
+			Log.Log (MasterConfig.Get("message_added"));
 		}
 
 		/// <summary>
@@ -220,9 +220,9 @@ namespace Kast.Server.Base
 		/// Print the status of the Relay
 		/// </summary>
 		public void PrintStatus(){
-			Console.WriteLine (ActiveBoxes.Count + " " + MasterConfig.Assets["message_boxes"]);
-			Console.WriteLine (Hooks.Count + " " + MasterConfig.Assets["message_hooks"]);
-			Console.WriteLine (Feeds.Count + " " + MasterConfig.Assets["message_feeds"]);
+			Console.WriteLine (ActiveBoxes.Count + " " + MasterConfig.Get("message_boxes"));
+			Console.WriteLine (Hooks.Count + " " + MasterConfig.Get("message_hooks"));
+			Console.WriteLine (Feeds.Count + " " + MasterConfig.Get("message_feeds"));
 		}
 	}
 }

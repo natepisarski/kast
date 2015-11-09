@@ -69,8 +69,8 @@ namespace Kast.Client
 		/// <param name="message">The message to send</param>
 		public void SendData(string message){
 			SendData (message, 
-				IPAddress.Parse(MasterConfig.Assets["client_address"]), 
-				int.Parse(MasterConfig.Assets["client_port"]));
+				IPAddress.Parse(MasterConfig.Get("client_address")), 
+				int.Parse(MasterConfig.Get("client_port")));
 		}
 
 		/// <summary>

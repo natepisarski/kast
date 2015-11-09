@@ -4,7 +4,8 @@ using System.IO;
 namespace Kast.Server.General
 {
 	/// <summary>
-	/// Logger is the class responsible for
+	/// Logger is the class responsible for logging output to a 
+	/// stream, which is usually a file or standard output.
 	/// </summary>
 	public class Logger
 	{
@@ -35,7 +36,7 @@ namespace Kast.Server.General
 		/// </summary>
 		/// <param name="config"></param>
 		public Logger(KastConfiguration config){
-			this.OutputStream = new FileStream (config.Assets ["server_log"], FileMode.Append);
+			OutputStream = new FileStream (config.Get("server_log"), FileMode.Append);
 		}
 
 		/// <summary>

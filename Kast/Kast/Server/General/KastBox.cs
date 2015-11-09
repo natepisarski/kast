@@ -74,10 +74,10 @@ namespace Kast.Server.General
 			ProcessArguments = new List<string> ();
 			Log = log;
 			try{
-				if(kc.Assets.ContainsKey("args"))
-					ProcessArguments = Sections.EscapeSplit(kc.Assets["args"], ',');
+				if(kc.Has("args"))
+					ProcessArguments = Sections.EscapeSplit(kc.Get("args"), ',');
 
-				Name = kc.Assets["name"];
+				Name = kc.Get("name");
 			}catch(Exception e){
 				Defaults ();
 			}
@@ -107,7 +107,7 @@ namespace Kast.Server.General
 				string processOutput = runningProcess.StandardOutput.ReadToEnd();
 				Buffer.Add(processOutput);
 			} catch(InvalidOperationException e) {
-				Console.WriteLine(ProcessName + MasterConfig.Assets["message_output_error"]);
+				Console.WriteLine(ProcessName + MasterConfig.Get("message_output_error"));
 				Console.WriteLine (e.StackTrace);
 			}
 		}

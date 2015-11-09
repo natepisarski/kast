@@ -46,14 +46,14 @@ namespace Kast.Server
 		/// <param name="address">The address to listen to</param>
 		/// <param name="port">The port to listen to</param>
 		public Program(KastConfiguration master, Logger logger){
-			MainServitor = new Servitor (IPAddress.Parse(master.Assets["server_address"]),
-				int.Parse(master.Assets["server_port"]));
+			MainServitor = new Servitor (IPAddress.Parse(master.Get("server_address")),
+				int.Parse(master.Get("server_port")));
 			Log = logger;
 			MasterConfig = master;
 			Relay = new KastRelay (master, logger);
 
 			// Tick delay is read in seconds
-			TickDelay = (int) double.Parse(master.Assets ["settings_tick_delay"])*(1000);
+			TickDelay = (int) double.Parse(master.Get("settings_tick_delay"))*(1000);
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace Kast.Server
 			var servitorThread = new Thread(new ThreadStart(MainServitor.Start));
 			servitorThread.Start();
 
-			Log.Log (MasterConfig.Assets["message_server_start"]);
+					Log.Log (MasterConfig.Get("message_server_start"));
 			for (;/*ever*/; )
 			{
 				Thread.Sleep(TickDelay);
@@ -75,7 +75,7 @@ namespace Kast.Server
 					foreach (string command in commands) {
 						var commandWords = command.Split (' ');
 
-						if (commandWords [0].Equals (MasterConfig.Assets["command_remove"]))
+						if (commandWords [0].Equals (MasterConfig.Get("command_remove")))
 							Relay.RemoveComponent (commandWords [1]);
 						else
 							Relay.AddComponent (commandWords);

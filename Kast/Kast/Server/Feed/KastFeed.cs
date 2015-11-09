@@ -64,8 +64,8 @@ namespace Kast.Server.Feed
 			Destination = destination;
 
 			try {
-				Option = BuildKastFeedOption(config.Assets["option"]);
-				Name = config.Assets["name"];
+				Option = BuildKastFeedOption(config.Get("option"));
+				Name = config.Get("name");
 			}catch(Exception e){
 				Defaults ();
 			}

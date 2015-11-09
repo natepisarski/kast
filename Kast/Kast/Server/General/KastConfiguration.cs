@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 using System.Collections.Generic;
 
@@ -64,6 +65,75 @@ namespace Kast.Server.General
 			return BuildAssets (builderLine.Split (' '));
 		}
 
+		/// <summary>
+		/// Load a file of sections into the kast configuration
+		/// </summary>
+		/// <param name="filename">The path to the file containing the configuration</param>
+		public void Load(string filename){
+			Assets = new Dictionary<string, string> ();
+
+			foreach (string line in File.ReadAllLines(filename)) {
+
+				// Emptyish line? Proceed
+				if (line.Length < 2)
+					continue;
+
+				// Header comment
+				if (line [0].Equals ('+') && line [1].Equals ('+'))
+					continue;
+
+				var keyValue = Sections.ParseSections (line, '|');
+				Assets.Add (keyValue [0], keyValue [1]);
+			}
+
+		}
+
+		/// <summary>
+		/// Return a sane default configuration for the kast program. This is the default that the repository
+		/// include in its file and that all documentation examples use.
+		/// </summary>
+		/// <returns>The default configuration to use</returns>
+		public static Dictionary<string, string> DefaultConfiguration(){
+			var assets = new Dictionary<string, string> ();
+
+			// Message Blocks
+			assets.Add ("message_server_start", "Server now listening on port");
+			assets.Add ("message_added", "Component added to the relay");
+
+			// Diagnostics
+			assets.Add ("message_boxes", "Boxes.");
+			assets.Add ("message_hooks", "Hooks.");
+			assets.Add ("message_feeds", "Feeds.");
+
+			// Exceptions
+			assets.Add ("message_misshapen_box", "Misshapen box detected");
+			assets.Add ("message_misshapen_feed", "Misshapen feed detected");
+			assets.Add ("message_misshapen_hook", "Misshapen hook detected");
+			assets.Add ("mesage_improper_build", "Received improper request to build: ");
+			assets.Add ("message_output_error", "Failed to execute properly. Ignoring output");
+
+			// Client commands
+			assets.Add ("command_remove", "unlist");
+
+			// Core components
+			assets.Add ("command_box", "box");
+			assets.Add ("command_feed", "feed");
+			assets.Add ("command_hook", "hook");
+
+			// Settings
+			assets.Add ("settings_tick_delay", "1");
+			assets.Add ("settings_port", "4206");
+
+			// Defaults
+			assets.Add ("client_address", "127.0.0.1");
+			assets.Add ("client_port", "4206");
+
+			assets.Add ("server_port", "4206");
+			assets.Add ("server_address", "127.0.0.1");
+			assets.Add ("server_log", "/tmp/kast_server.log");
+
+			return assets;
+		}
 	}
 }
 

@@ -33,19 +33,41 @@ namespace Kast.Server.Base
 		List<KastHook> Hooks { get; set; }
 
 		/// <summary>
+		/// Gets or sets the builder
+		/// </summary>
+		/// <value>The KastBuilder that will be used to build new components</value>
+		KastBuilder Builder {get; set;}
+
+		/// <summary>
 		/// Every component in the relay
 		/// </summary>
 		public List<IKastComponent> Components {get; set;}
 
 		/// <summary>
+		/// The master configuration, supplied by Server.Program
+		/// </summary>
+		/// <value>The master configuration table</value>
+		public KastConfiguration MasterConfig{ get; set; }
+
+		/// <summary>
+		/// The logger that's being used
+		/// </summary>
+		public Logger Log;
+
+		/// <summary>
 		/// Create an empty KastRelay
 		/// </summary>
-		public KastRelay()
+		public KastRelay(KastConfiguration masterConfig, Logger log)
 		{
 			ActiveBoxes = new List<KastBox>();
 			Feeds = new List<KastFeed> ();
 			Hooks = new List<KastHook> ();
 			Components = new List<IKastComponent> ();
+
+			MasterConfig = masterConfig;
+			Log = log;
+
+			Builder = new KastBuilder (MasterConfig, Log);
 		}
 
 		/// <summary>
@@ -62,8 +84,7 @@ namespace Kast.Server.Base
 
 			Components.Add (component);
 
-			//TODO: Change to Logger call
-			Console.WriteLine ("Component added to relay");
+			Log.Log (MasterConfig.Assets["message_added"]);
 		}
 
 		/// <summary>
@@ -72,7 +93,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="args">The arguments describing the component</param>
 		public void AddComponent(string[] args){
-			AddComponent (KastBuilder.Build (args));
+			AddComponent (Builder.Build (args));
 		}
 
 		/// <summary>
@@ -199,9 +220,9 @@ namespace Kast.Server.Base
 		/// Print the status of the Relay
 		/// </summary>
 		public void PrintStatus(){
-			Console.WriteLine (ActiveBoxes.Count + " boxes.");
-			Console.WriteLine (Hooks.Count + " hooks");
-			Console.WriteLine (Feeds.Count + " feeds");
+			Console.WriteLine (ActiveBoxes.Count + " " + MasterConfig.Assets["message_boxes"]);
+			Console.WriteLine (Hooks.Count + " " + MasterConfig.Assets["message_hooks"]);
+			Console.WriteLine (Feeds.Count + " " + MasterConfig.Assets["message_feeds"]);
 		}
 	}
 }

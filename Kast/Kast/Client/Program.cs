@@ -9,9 +9,19 @@ namespace Kast.Client
 {
 	public class Program
 	{
-		public Program ()
-		{
+		KastConfiguration MasterConfig;
+		Logger Log;
 
+		/// <summary>
+		/// Initializes a new instance of the Program, with the masterConfig
+		/// configuration
+		/// </summary>
+		/// <param name="masterConfig">The configuration to use for the client</param>
+		/// <param name="log">The logger to write to</param>
+		public Program (KastConfiguration masterConfig, Logger log)
+		{
+			MasterConfig = masterConfig;
+			Log = log;
 		}
 
 		/// <summary>
@@ -54,15 +64,20 @@ namespace Kast.Client
 	}
 
 		/// <summary>
-		/// Sends data to the default IP and port
+		/// Sends data to the IP and Port defined in the configuration file
 		/// </summary>
 		/// <param name="message">The message to send</param>
-		public static void SendData(string message){
-			SendData (message, IPAddress.Loopback, 4206);
+		public void SendData(string message){
+			SendData (message, 
+				IPAddress.Parse(MasterConfig.Assets["client_address"]), 
+				int.Parse(MasterConfig.Assets["client_port"]));
 		}
 
-
-		public static void main(string[] args){
+		/// <summary>
+		/// Send these arguments to the server
+		/// </summary>
+		/// <param name="args">The arguments to send to the server</param>
+		public void main(string[] args){
 			SendData (Sections.RepairString (args));
 		}
 }

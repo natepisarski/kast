@@ -31,6 +31,16 @@ namespace Kast.Server.General
 		public string Name {get; set;}
 
 		/// <summary>
+		/// The master configuration
+		/// </summary>
+		private KastConfiguration MasterConfig {get; set;}
+
+		/// <summary>
+		/// The logger to write to
+		/// </summary>
+		private Logger Log { get; set; }
+
+		/// <summary>
 		/// Gets this Box's buffer
 		/// </summary>
 		/// <value>The output of this KastBox</value>
@@ -43,11 +53,13 @@ namespace Kast.Server.General
 		/// Creates a new KastBox, with the name as the process's name
 		/// </summary>
 		/// <param name="name">The name of the process that this Box will manage</param>
-		public KastBox (string name)
+		public KastBox (string name, KastConfiguration masterConfig)
 		{
 			ProcessName = name;
+			MasterConfig = masterConfig;
 			ProcessArguments = new List<string> ();
 			Defaults ();
+
 		}
 
 		/// <summary>
@@ -55,10 +67,12 @@ namespace Kast.Server.General
 		/// </summary>
 		/// <param name="procName">The name of the process</param>
 		/// <param name="kc">The KastConfiguration for this Box. Accepts: args, name</param>
-		public KastBox(string procName, KastConfiguration kc){
+		public KastBox(string procName, KastConfiguration kc, KastConfiguration masterConfig, Logger log){
 			ProcessName = procName;
+			MasterConfig = masterConfig;
 			Buffer = new List<string> ();
 			ProcessArguments = new List<string> ();
+			Log = log;
 			try{
 				if(kc.Assets.ContainsKey("args"))
 					ProcessArguments = Sections.EscapeSplit(kc.Assets["args"], ',');
@@ -93,7 +107,7 @@ namespace Kast.Server.General
 				string processOutput = runningProcess.StandardOutput.ReadToEnd();
 				Buffer.Add(processOutput);
 			} catch(InvalidOperationException e) {
-				Console.WriteLine(ProcessName + " did not output properly. Ignoring output.");
+				Console.WriteLine(ProcessName + MasterConfig.Assets["message_output_error"]);
 				Console.WriteLine (e.StackTrace);
 			}
 		}

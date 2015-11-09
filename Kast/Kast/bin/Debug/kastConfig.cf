@@ -1,0 +1,34 @@
+++Message Blocks
+message_server_start |Server now listening on port|
+message_added |Component added to the relay|
+
+++Diagnostics
+message_boxes |Boxes.|
+message_hooks |Hooks.|
+message_feeds |Feeds.|
+
+++Exceptions
+message_misshapen_box |Misshapen box detected|
+message_misshapen_feed |Misshapen feed detected|
+message_misshapen_hook |Misshapen hook detected|
+message_improper_build |Received improper request to build: |
+message_output_error |Failed to execute properly. Ignoring output|
+
+++Client Commands
+command_remove |unlist|
+
+++Core components
+command_box |box|
+command_feed |feed|
+command_hook |hook|
+
+++Settings
+settings_tick_delay |1|
+settings_port |4206|
+
+++Defaults
+client_address |127.0.0.1|
+client_port |4206|
+
+server_address |127.0.0.1|
+server_log |/tmp/kast_server.log|

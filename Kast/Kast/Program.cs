@@ -1,69 +1,134 @@
 ﻿using System;
+using System.Threading;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
 
-using Kast.General;
+using Kast.Server.General;
 
-namespace Kast.Client
+namespace Kast
 {
-	public class Program
+	/*Master TODO list (in no particular order)*/
+
+	//TODO: Add list capabilities to client (list running names)
+	//TODO: Handle all thrown exceptions
+	//TODO: Implement command builder interface for client
+	//TODO: Make the configuration file more forgiving (missing key? Use default value)
+	//TODO: Add "ObjectExists" exception for name clashes
+	//TODO: Change Builder around to use inheritence of a Builder
+
+	/* Very future TODOS */
+	//TODO: Add scripting support (read arguments one-by-one as kast-client commands)
+	//TODO: Add GUI support for client
+
+	/// <summary>
+	/// The entry point for the Kast program.
+	/// </summary>
+	class MainClass
 	{
-		public Program ()
-		{
-
-		}
-
 		/// <summary>
-		/// Sends data to a specified IPAdress and port. 
+		/// Get help for a specific part of kast.
 		/// </summary>
-		/// <param name="data">Data.</param>
-		/// <param name="adress">Adress.</param>
-		/// <param name="port">Port.</param>
-		public static void SendData(string data, IPAddress adress, int port) {
-			// Data buffer for incoming data.
-			byte[] bytes = new byte[1024];
+		/// <param name="part">The part of the program to get help for. Can be server or client.</param>
+		public static string Help(string part){
+			string helpMsg = "";
 
-			// Connect to a remote device.
-			try {
-
-				// Create a TCP/IP  socket.
-				Socket sender = new Socket(AddressFamily.InterNetwork, 
-					SocketType.Stream, ProtocolType.Tcp );
-
-				// Connect the socket to the remote endpoint. Catch any errors.
-				try {
-					sender.Connect(adress, port);
-
-					// Encode the data string into a byte array.
-					byte[] msg = Encoding.ASCII.GetBytes(data);
-
-					// Send the data through the socket.
-					int bytesSent = sender.Send(msg);
-
-					// Release the socket.
-					sender.Shutdown(SocketShutdown.Both);
-					sender.Close();
-
-				} catch (Exception e){
-					Console.WriteLine(e.ToString());
-				} 
-			} catch(Exception e){
-				Console.WriteLine (e.ToString ());
+			if(part.Equals("server")){
+				return ("The command \"kast server\" will start the server");
 			}
-	}
+			if (part.Equals ("client")) {
+				helpMsg += "[] denotes a required argument. {} denotes optional ones. OR denotes choices\n";
+				helpMsg += "Client commands templates are:\n";
+
+				helpMsg += "kast client box [command] +{args comma,separated,args} {name boxName}\n";
+				helpMsg += "kast client feed |[box syntax]| |[box syntax]| |{name feedName} {option all OR last}\n";
+				helpMsg += "kast client hook |[box syntax]| target |{name hookName} {option first OR last OR innerRemove OR innerKeep}\n";
+				helpMsg += "kast client unlist name\n";
+				helpMsg += "In places where [box syntax] is accepted, @name is accepted to reference a currently running box in the relay";
+
+			} else return Help();
+
+			return helpMsg;
+		}
 
 		/// <summary>
-		/// Sends data to the default IP and port
+		/// General help. This happens if no input is given on the command line.
 		/// </summary>
-		/// <param name="message">Message.</param>
-		public static void SendData(string message){
-			SendData (message, IPAddress.Loopback, 4206);
+		public static string Help(){
+			string helpMsg = "";
+
+			helpMsg += "Welcome to kast help.\n";
+			helpMsg += "For more general help, type \"kast help server\" or \"kast help client\"\n";
+
+			return helpMsg;
 		}
 
+		/// <summary>
+		/// Either creates a server in this thread, or sends data to a running server.
+		/// </summary>
+		/// <param name="args">The command-line arguments.</param>
+		public static void Main (string[] args)
+		{
+			Console.WriteLine ("Kast started");
+			//*
+			Console.WriteLine ();
 
-		public static void main(string[] args){
-			SendData (Sections.RepairString (args));
+			// Help the user if they need it
+			if (args.Length == 0 || args [0].Equals ("help")){
+				if (args.Length > 1)
+					Console.WriteLine (Help (args [1]));
+				else
+					Console.WriteLine (Help ());
+				return;
+			}
+
+			// If it's not asking for help, server, or client, just exit.
+			if (!(args [0].Equals ("server") || args [0].Equals ("client"))) {
+				Console.WriteLine ("Unrecognized command. Exiting kast. Use \"kast help\" for help.");
+				Environment.Exit (0);
+			}
+
+			var masterConfig = new KastConfiguration ();
+
+			// Is there a command line flag specifying the configuration?
+			if (args.Length > 1 && args [1].Equals ("file"))
+				masterConfig.Load (args [2]);
+			else
+				masterConfig = new KastConfiguration(KastConfiguration.DefaultConfiguration ());
+
+			var logger = new Logger (masterConfig.Assets["server_log"]);
+
+			if(args[0].Equals("server")){
+				var server = new Server.Program (masterConfig, logger);
+				server.Start ();
+			} else {
+				// Send everything but "client" and "file" if it exists
+				var client = new Client.Program (masterConfig, logger);
+				client.main(Misc.Subsequence (args, (args[1].Equals("file")?3:1), args.Length).ToArray());
+			}
+			//*/
 		}
-}
+		
+
+	/// <summary>
+	/// Until the project is mature, I will be using this to test the program
+	/// </summary>
+	public static void test(){
+			//*
+			KastConfiguration master = new KastConfiguration ();
+			master.Assets = KastConfiguration.DefaultConfiguration ();
+			Logger log = new Logger (master.Assets ["server_log"]);
+
+			Kast.Server.Program server = new Kast.Server.Program (master, log);
+			Kast.Client.Program client = new Kast.Client.Program (master, log);
+
+			// The server is running now
+			new Thread (new ThreadStart (server.Start)).Start ();
+
+			client.SendData ("box echo +args hello,msg name hello+");
+			client.SendData ("box notify-send +name writer+");
+			client.SendData ("hook |box notify-send +args \"hi\"+| |hello| |name myName|");
+
+			Console.WriteLine ("Successful test");
+			//*/
+		}
+	}
 }

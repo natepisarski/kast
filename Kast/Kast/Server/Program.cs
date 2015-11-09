@@ -2,10 +2,12 @@
 
 using System.Collections.Generic;
 using System.Threading;
+using System.Net.Sockets;
 using System.Net;
 
 using Kast.Server.Base;
 using Kast.Server;
+using Kast.Server.General;
 
 namespace Kast.Server
 {
@@ -17,17 +19,24 @@ namespace Kast.Server
 	public class Program
 	{
 		Servitor MainServitor {get; set;}
+
 		KastRelay Relay { get; set; }
+
+		Logger Log {get; set;}
+
+		KastConfiguration MasterConfig {get; set;}
+
 		int TickDelay { get; set; }
 
 		/// <summary>
 		/// Create a new Server, listening to the
 		/// default port of 4206.
+		/// <param name="master">The master configuration to use</param>
 		/// </summary>
-		public Program ()
+		public Program (KastConfiguration master)
 		{
 			MainServitor = new Servitor();
-			Relay = new KastRelay();
+			Relay = new KastRelay(master, new Logger(master));
 			TickDelay = 1000;
 		}
 
@@ -36,8 +45,15 @@ namespace Kast.Server
 		/// </summary>
 		/// <param name="address">The address to listen to</param>
 		/// <param name="port">The port to listen to</param>
-		public Program(IPAddress address, int port){
-			MainServitor = new Servitor (address, port);
+		public Program(KastConfiguration master, Logger logger){
+			MainServitor = new Servitor (IPAddress.Parse(master.Assets["server_address"]),
+				int.Parse(master.Assets["server_port"]));
+			Log = logger;
+			MasterConfig = master;
+			Relay = new KastRelay (master, logger);
+
+			// Tick delay is read in seconds
+			TickDelay = (int) double.Parse(master.Assets ["settings_tick_delay"])*(1000);
 		}
 
 		/// <summary>
@@ -48,7 +64,7 @@ namespace Kast.Server
 			var servitorThread = new Thread(new ThreadStart(MainServitor.Start));
 			servitorThread.Start();
 
-			Console.WriteLine ("The server is now listening");
+			Log.Log (MasterConfig.Assets["message_server_start"]);
 			for (;/*ever*/; )
 			{
 				Thread.Sleep(TickDelay);
@@ -59,7 +75,7 @@ namespace Kast.Server
 					foreach (string command in commands) {
 						var commandWords = command.Split (' ');
 
-						if (commandWords [0].Equals ("unlist"))
+						if (commandWords [0].Equals (MasterConfig.Assets["command_remove"]))
 							Relay.RemoveComponent (commandWords [1]);
 						else
 							Relay.AddComponent (commandWords);

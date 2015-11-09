@@ -33,18 +33,31 @@ namespace Kast.Server.Hook
 		public string Name {get; set;}
 
 		/// <summary>
+		/// The log to write to
+		/// </summary>
+		public Logger Log;
+
+		/// <summary>
+		/// The master configuration
+		/// </summary>
+		public KastConfiguration MasterConfig;
+
+		/// <summary>
 		/// Makes a KastHook using an existing Box and a string target.
 		/// </summary>
 		/// <param name="box">Box.</param>
 		/// <param name="target">Target.</param>
 		/// <param name="option">The option to use</param> 
-		public KastHook (KastBox box, string target, KastHookOption option)
+		public KastHook (KastBox box, string target, KastHookOption option, KastConfiguration masterConfig, Logger log)
 		{
 			Box = box; 
 			Target = target;
 			Option = option;
 
 			Name = "";
+
+			MasterConfig = masterConfig;
+			Log = log;
 		}
 
 		/// <summary>
@@ -53,10 +66,11 @@ namespace Kast.Server.Hook
 		/// <param name="box">The box to capture.</param> 
 		/// <param name="target">The string that will make this hook fire</param>
 		/// <param name="config">Configuration assets, such as name and option.</param>
-		public KastHook(IKastComponent box, string target, KastConfiguration config){
+		public KastHook(IKastComponent box, string target, KastConfiguration config, KastConfiguration masterConfig, Logger log){
 			Box = box;
 			Target = target;
-
+			MasterConfig = masterConfig;
+			Log = log;
 			try {
 				Option = KastHook.BuildKastHookOption(config.Assets["option"]);
 				Name = config.Assets["name"];
@@ -117,7 +131,7 @@ namespace Kast.Server.Hook
 		/// Do not use. Implemented only for Polymorphism of all cast components.
 		/// </summary>
 		public void PulseReact(){
-			Console.WriteLine("[Warning]: KastHook.PulseReact() should never be called.");
+			Log.Warn ("KastHook.PulseReact() should never be called");
 		}
 
 		public string Latest(){

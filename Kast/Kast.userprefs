@@ -1,0 +1,57 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Kast/Server/General/Logger.cs">
+    <Files>
+      <File FileName="Kast/Client/Program.cs" Line="46" Column="46" />
+      <File FileName="Kast/Server/General/Logger.cs" Line="59" Column="59" />
+      <File FileName="Kast/Program.cs" Line="77" Column="77" />
+      <File FileName="Kast/Server/Program.cs" Line="72" Column="72" />
+      <File FileName="Kast/Server/Base/KastBuilder.cs" Line="67" Column="67" />
+      <File FileName="Kast/Server/General/Sections.cs" Line="1" Column="1" />
+      <File FileName="Kast/Server/Base/KastRelay.cs" Line="76" Column="76" />
+      <File FileName="Kast/Server/General/KastBox.cs" Line="77" Column="77" />
+      <File FileName="Kast/Server/Feed/KastFeed.cs" Line="30" Column="30" />
+      <File FileName="Kast/Server/General/Misc.cs" Line="4" Column="4" />
+      <File FileName="Kast/Server/Hook/KastHook.cs" Line="30" Column="30" />
+      <File FileName="Kast/Server/General/KastConfiguration.cs" Line="14" Column="14" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Kast" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="Client" expanded="True" />
+            <Node name="Server" expanded="True">
+              <Node name="Base" expanded="True" />
+              <Node name="Feed" expanded="True" />
+              <Node name="General" expanded="True">
+                <Node name="Logger.cs" selected="True" />
+              </Node>
+              <Node name="Hook" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Kast>
+    <MonoDevelop.Ide.CustomExecutionModes>
+      <Data Name="Mono Soft Debugger (Custom)" Id="7c0202c0-e76b-47c9-8b9c-da2d27edbdae" ModeId="Mono Soft Debugger">
+        <CommandData>
+          <Item Key="MonoDevelop.Ide.Execution.CustomArgsCustomizer">
+            <Value Arguments="client box ls |args -a,-R name myName|" ctype="CustomArgsExecutionModeData">
+              <EnvironmentVariables />
+            </Value>
+          </Item>
+          <Item Key="MonoDevelop.Ide.Execution.MonoExecutionCustomizer">
+            <Value ctype="MonoExecutionParameters" />
+          </Item>
+        </CommandData>
+      </Data>
+    </MonoDevelop.Ide.CustomExecutionModes>
+  </MonoDevelop.Ide.ItemProperties.Kast>
+</Properties>

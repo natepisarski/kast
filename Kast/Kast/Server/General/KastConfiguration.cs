@@ -113,6 +113,8 @@ namespace Kast.Server.General
 			assets.Add ("message_misshapen_hook", "Misshapen hook detected");
 			assets.Add ("mesage_improper_build", "Received improper request to build: ");
 			assets.Add ("message_output_error", "Failed to execute properly. Ignoring output");
+			assets.Add ("message_ambiguous_process_error", "Ambiguous process execution error. Is this command in your $PATH? Command:");
+			assets.Add ("message_kasthook_option_unrecognized", "This KastHookOption was specified, but unrecognized: ");
 
 			// Client commands
 			assets.Add ("command_remove", "unlist");
@@ -126,13 +128,22 @@ namespace Kast.Server.General
 			assets.Add ("settings_tick_delay", "1");
 			assets.Add ("settings_port", "4206");
 
-			// Defaults
+			// Server Defaults
 			assets.Add ("client_address", "127.0.0.1");
 			assets.Add ("client_port", "4206");
 
 			assets.Add ("server_port", "4206");
 			assets.Add ("server_address", "127.0.0.1");
 			assets.Add ("server_log", "/tmp/kast_server.log");
+
+			// Internal defaults
+			assets.Add ("default_kasthook_option", "first");
+			assets.Add ("default_kastfeed_option", "last");
+
+			// Internals
+			assets.Add ("name", "Unnamed component");
+			assets.Add ("args", "No arguments");
+
 			//END AUTOMATICALLY GENERATED CODE
 
 			return assets;

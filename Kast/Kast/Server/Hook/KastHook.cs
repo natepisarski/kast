@@ -9,9 +9,9 @@ namespace Kast.Server.Hook
 	/// Hooks will capture the input of any command that matches
 	/// their Target, and execute, using the rest of the string as an argument.
 	/// </summary>
-	public class KastHook : IKastComponent
+	public class KastHook : KastComponent
 	{
-		public IKastComponent Box {get; set; }
+		public KastComponent Box {get; set; }
 
 		/// <summary>
 		/// Gets or sets the target, the value that will cause this
@@ -27,28 +27,12 @@ namespace Kast.Server.Hook
 		public KastHookOption Option { get; set; }
 
 		/// <summary>
-		/// Name the Box so that it can be accessed from the Relay.
-		/// </summary>
-		/// <value>Any string that names this instance.</value>
-		public string Name {get; set;}
-
-		/// <summary>
-		/// The log to write to
-		/// </summary>
-		public Logger Log;
-
-		/// <summary>
-		/// The master configuration
-		/// </summary>
-		public KastConfiguration MasterConfig;
-
-		/// <summary>
 		/// Makes a KastHook using an existing Box and a string target.
 		/// </summary>
 		/// <param name="box">Box.</param>
 		/// <param name="target">Target.</param>
 		/// <param name="option">The option to use</param> 
-		public KastHook (KastBox box, string target, KastHookOption option, KastConfiguration masterConfig, Logger log)
+		public KastHook (KastBox box, string target, KastHookOption option, KastConfiguration masterConfig)
 		{
 			Box = box; 
 			Target = target;
@@ -57,7 +41,7 @@ namespace Kast.Server.Hook
 			Name = "";
 
 			MasterConfig = masterConfig;
-			Log = log;
+			Log = new Logger (masterConfig);
 		}
 
 		/// <summary>
@@ -66,13 +50,13 @@ namespace Kast.Server.Hook
 		/// <param name="box">The box to capture.</param> 
 		/// <param name="target">The string that will make this hook fire</param>
 		/// <param name="config">Configuration assets, such as name and option.</param>
-		public KastHook(IKastComponent box, string target, KastConfiguration config, KastConfiguration masterConfig, Logger log){
+		public KastHook(KastComponent box, string target, KastConfiguration config, KastConfiguration masterConfig){
 			Box = box;
 			Target = target;
 			MasterConfig = masterConfig;
-			Log = log;
+			Log = new Logger (masterConfig);
 			try {
-				Option = KastHook.BuildKastHookOption(config.Get("option"));
+				Option = this.BuildKastHookOption(config.Get("option"));
 				Name = config.Get("name");
 			}catch(Exception e){
 				Defaults ();
@@ -130,21 +114,23 @@ namespace Kast.Server.Hook
 		/// <summary>
 		/// Do not use. Implemented only for Polymorphism of all cast components.
 		/// </summary>
-		public void PulseReact(){
+		public override void PulseReact(){
 			Log.Warn ("KastHook.PulseReact() should never be called");
 		}
 
-		public string Latest(){
+		/// <summary>
+		/// Get the box's latest output
+		/// </summary>
+		public override string Latest(){
 			return Box.Latest ();
 		}
 
-		public void Defaults(){
+		/// <summary>
+		/// Set the default options for this hook
+		/// </summary>
+		public override void Defaults(){
 			Name = "";
 			Option = KastHookOption.First;
-		}
-
-		public string GetName(){
-			return Name;
 		}
 
 		/// <summary>
@@ -152,7 +138,8 @@ namespace Kast.Server.Hook
 		/// such a way: "option {First|Last|InnerRemove|InnerKeep}"
 		/// </summary>
 		/// <param name="buildString">The string which contains an option</param>
-		public static KastHookOption BuildKastHookOption(string buildString){
+		public KastHookOption BuildKastHookOption(string buildString){
+			try{
 			buildString = buildString.ToLower ();
 
 			if (buildString.Contains ("first"))
@@ -167,7 +154,11 @@ namespace Kast.Server.Hook
 			if (buildString.Contains ("innerkeep"))
 				return KastHookOption.InnerKeep;
 
-			throw new Exception ("BuildKastHookOption did not recognize: " + buildString);
+				throw new Exception (MasterConfig.Get("message_kasthook_option_unrecognized") + buildString);
+			} catch(Exception e){
+				Log.Warn (e.Message);
+				return this.BuildKastHookOption (MasterConfig.Get ("default_kasthook_option"));
+			}
 		}
 	}
 }

@@ -44,7 +44,7 @@ namespace Kast.Server.General
 		/// </summary>
 		/// <param name="data">The data to log to the output stream</param>
 		public void LogRaw(string data){
-			StreamWriter writer = new StreamWriter (OutputStream);
+			var writer = new StreamWriter (OutputStream);
 			writer.Write (data);
 			writer.Flush ();
 		}

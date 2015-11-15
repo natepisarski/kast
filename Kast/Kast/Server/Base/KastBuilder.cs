@@ -63,7 +63,7 @@ namespace Kast.Server.Base
 		///  Build the box itself
 		/// </summary>
 		/// <param name="source">Source lines given by the command line.</param>
-		public IKastComponent BuildBox(string[] source) {
+		public KastComponent BuildBox(string[] source) {
 			source = Sections.ParseSections (Sections.RepairString (source), '+');
 
 			if(!VerifyBox(source))
@@ -91,7 +91,7 @@ namespace Kast.Server.Base
 		/// Create a new Feed given a list of arguments
 		/// </summary>
 		/// <param name="source">Source lines given by the command line.</param>
-		public IKastComponent BuildFeed(string[] source){
+		public KastComponent BuildFeed(string[] source){
 
 			// Get the sections in the format [feed, source, destination, assets]
 			source = Sections.ParseSections (Sections.RepairString(source), '|');
@@ -101,8 +101,8 @@ namespace Kast.Server.Base
 
 			var configuration = new KastConfiguration (KastConfiguration.BuildAssets(source [3]));
 
-			IKastComponent sourceComp;
-			IKastComponent destinationComp;
+			KastComponent sourceComp;
+			KastComponent destinationComp;
 
 			sourceComp =  (source [1] [0].Equals ('@')) ?
 				BuildFuture (source [1]) : 
@@ -130,7 +130,7 @@ namespace Kast.Server.Base
 		/// Build the Hook itself
 		/// </summary>
 		/// <param name="source">Source lines given by the command line.</param>
-		public IKastComponent BuildHook(string[] source){
+		public KastComponent BuildHook(string[] source){
 			source = Sections.ParseSections (Sections.RepairString (source), '|');
 
 			if (!VerifyHook (source))
@@ -138,7 +138,7 @@ namespace Kast.Server.Base
 
 			var configuration = new KastConfiguration (KastConfiguration.BuildAssets (source [3]));
 
-			IKastComponent hook;
+			KastComponent hook;
 
 			// This Hook is a future!
 			hook = (source [1] [0].Equals ('@')) ?
@@ -149,8 +149,7 @@ namespace Kast.Server.Base
 				hook,
 				source [2], 
 				configuration,
-				MasterConfig,
-				Log
+				MasterConfig
 			);
 		}
 
@@ -160,16 +159,20 @@ namespace Kast.Server.Base
 		/// the first word supplied. Can be: box, hook, feed.
 		/// </summary>
 		/// <param name="source">Source lines given by the command line.</param>
-		public IKastComponent Build(string[] source){
-			Console.WriteLine ("Asked to build: " + Sections.RepairString (source));
-			if (source [0].Equals (MasterConfig.Get("command_box")))
-				return BuildBox (source);
-			else if (source [0].Equals (MasterConfig.Get("command_hook")))
-				return BuildHook (source);
-			else if (source [0].Equals (MasterConfig.Get("command_feed")))
-				return BuildFeed (source);
+		public KastComponent Build(string[] source){
+			try{
+				if (source [0].Equals (MasterConfig.Get("command_box")))
+					return BuildBox (source);
+				else if (source [0].Equals (MasterConfig.Get("command_hook")))
+					return BuildHook (source);
+				else if (source [0].Equals (MasterConfig.Get("command_feed")))
+					return BuildFeed (source);
 
-			throw new Exception (MasterConfig.Get("message_improper_build") + source[0]);
+				throw new Exception (MasterConfig.Get("message_improper_build") + source[0]);
+			} catch(Exception e) {
+				Log.Log (e.Message);
+				return null;
+			}
 		}
 	}
 }

@@ -10,20 +10,20 @@ namespace Kast.Server.Feed
 	/// Using KastFeedOption, you can control how the arguments are fed into the 
 	/// destination box.
 	/// </summary>
-	public class KastFeed : IKastComponent
+	public class KastFeed : KastComponent
 	{
 		/// <summary>
 		/// The source box. These arguments will be fed into
 		/// Destination
 		/// </summary>
 		/// <value>The box that will be fed into destination</value>
-		public IKastComponent Source { get; set; }
+		public KastComponent Source { get; set; }
 
 		/// <summary>
 		/// The destination. Source's output is supplied here.
 		/// </summary>
 		/// <value>The box that will be fed by the source</value>
-		public IKastComponent Destination{ get; set; } 
+		public KastComponent Destination{ get; set; } 
 
 		/// <summary>
 		/// Determines the behavior of this KastFeed.
@@ -31,11 +31,6 @@ namespace Kast.Server.Feed
 		/// <value>An Option. Can be All or Last.</value>
 		public KastFeedOption Option { get; set; }
 
-		/// <summary>
-		/// Name the Box so that it can be accessed from the Relay.
-		/// </summary>
-		/// <value>Any string that names this box.</value>
-		public string Name {get; set;}
 
 		/// <summary>
 		/// Creates a new feed from a source component, a destination component, and an
@@ -44,7 +39,7 @@ namespace Kast.Server.Feed
 		/// <param name="source">The source box</param>
 		/// <param name="destination">The destination box</param>
 		/// <param name="option">The option to use. All or Last.</param>
-		public KastFeed (IKastComponent source, KastBox destination, KastFeedOption option)
+		public KastFeed (KastComponent source, KastBox destination, KastFeedOption option)
 		{
 			Source = source;
 			Destination = destination;
@@ -59,7 +54,7 @@ namespace Kast.Server.Feed
 		/// <param name="source">The source box</param>
 		/// <param name="destination">The destination box</param>
 		/// <param name="config">The configuratin</param>
-		public KastFeed(IKastComponent source, IKastComponent destination, KastConfiguration config){
+		public KastFeed(KastComponent source, KastComponent destination, KastConfiguration config){
 			Source = source;
 			Destination = destination;
 
@@ -128,21 +123,26 @@ namespace Kast.Server.Feed
 			return null;
 		}
 			
-		public void PulseReact(){
+		/// <summary>
+		/// Feed the instances into one another
+		/// </summary>
+		public override void PulseReact(){
 			Feed ();
 		}
 
-		public string Latest(){
+		/// <summary>
+		/// Get the latest information from Destination's buffer
+		/// </summary>
+		public override string Latest(){
 			return Destination.Latest ();
 		}
 
-		public void Defaults(){
+		/// <summary>
+		/// Set this instance to the default settings
+		/// </summary>
+		public override void Defaults(){
 			Name = "";
 			Option = KastFeedOption.Last;
-		}
-
-		public string GetName(){
-			return Name;
 		}
 
 		/// <summary>

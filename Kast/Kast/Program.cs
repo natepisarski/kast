@@ -71,7 +71,6 @@ namespace Kast
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main (string[] args)
 		{
-			Console.WriteLine ("Kast started");
 			//*
 			Console.WriteLine ();
 
@@ -115,7 +114,7 @@ namespace Kast
 	/// <summary>
 	/// Until the project is mature, I will be using this to test the program
 	/// </summary>
-	public static void test(){
+	public static void Test(){
 			//*
 			KastConfiguration master = new KastConfiguration ();
 			master = new KastConfiguration(KastConfiguration.DefaultConfiguration ());
@@ -128,9 +127,7 @@ namespace Kast
 			// The server is running now
 			new Thread (new ThreadStart (server.Start)).Start ();
 
-			client.SendData ("box echo +args hello,msg name hello+");
-			client.SendData ("box notify-send +name writer+");
-			client.SendData ("hook |box notify-send +args \"hi\"+| |hello| |name myName|");
+			client.SendData ("box gshfdkgj sdgfjk");
 
 			Console.WriteLine ("Successful test");
 			//*/

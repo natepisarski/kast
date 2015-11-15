@@ -13,6 +13,8 @@ message_misshapen_feed |Misshapen feed detected|
 message_misshapen_hook |Misshapen hook detected|
 message_improper_build |Received improper request to build: |
 message_output_error |Failed to execute properly. Ignoring output|
+message_ambiguous_process_error |Ambiguous process execution error. Is this command in your $PATH? Command:|
+message_kasthook_option_unrecognized |This KastHookOption was specified, but unrecognized: |
 
 ++Client Commands
 command_remove |unlist|
@@ -26,9 +28,17 @@ command_hook |hook|
 settings_tick_delay |1|
 settings_port |4206|
 
-++Defaults
+++Server Defaults
 client_address |127.0.0.1|
 client_port |4206|
 
+++Internal defaults
+default_kasthook_option |first|
+default_kastfeed_option |last|
+
 server_address |127.0.0.1|
 server_log |/tmp/kast_server.log|
+
+++Internals
+name |Unnamed component|
+args |No arguments|

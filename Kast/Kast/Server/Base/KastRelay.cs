@@ -41,7 +41,7 @@ namespace Kast.Server.Base
 		/// <summary>
 		/// Every component in the relay
 		/// </summary>
-		public List<IKastComponent> Components {get; set;}
+		public List<KastComponent> Components {get; set;}
 
 		/// <summary>
 		/// The master configuration, supplied by Server.Program
@@ -62,7 +62,7 @@ namespace Kast.Server.Base
 			ActiveBoxes = new List<KastBox>();
 			Feeds = new List<KastFeed> ();
 			Hooks = new List<KastHook> ();
-			Components = new List<IKastComponent> ();
+			Components = new List<KastComponent> ();
 
 			MasterConfig = masterConfig;
 			Log = log;
@@ -74,7 +74,7 @@ namespace Kast.Server.Base
 		/// Add a new KastComponent to the list of active components
 		/// </summary>
 		/// <param name="component">The component to add</param>
-		public void AddComponent(IKastComponent component){
+		public void AddComponent(KastComponent component){
 			if (component is KastBox)
 				ActiveBoxes.Add (component as KastBox);
 			else if (component is KastFeed)
@@ -108,7 +108,7 @@ namespace Kast.Server.Base
 		/// Removes the component from the list of Active Components.
 		/// </summary>
 		/// <param name="component">The component to remove from the system</param>
-		public void RemoveComponent(IKastComponent component){
+		public void RemoveComponent(KastComponent component){
 			if (component is KastBox)
 				ActiveBoxes.Remove (component as KastBox);
 			else if (component is KastFeed)
@@ -124,7 +124,7 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <param name="name">The name to remove</param>
 		public void RemoveComponent(string name){
-			Components.RemoveAll (x => x.GetName ().Equals (name));
+			Components.RemoveAll (x => x.Name.Equals (name));
 		}
 
 		/// <summary>
@@ -132,12 +132,12 @@ namespace Kast.Server.Base
 		/// </summary>
 		/// <returns>The first component found with this name</returns>
 		/// <param name="name">The name to look up</param>
-		public IKastComponent GetComponentByName(string name){
-			foreach (IKastComponent component in Components) {
+		public KastComponent GetComponentByName(string name){
+			foreach (KastComponent component in Components) {
 				if (component == null)
 					continue;
 
-				if (component.GetName ().Equals (name))
+				if (component.Name.Equals (name))
 					return component;
 			}
 			return null;
@@ -150,8 +150,8 @@ namespace Kast.Server.Base
 		/// <param name="name2">The component with this name to match</param>
 		/// <param name="config">The configuration to use for this Feed.</param>
 		public void BindComponents(string name1, string name2, KastConfiguration config){
-			IKastComponent item1 = GetComponentByName (name1);
-			IKastComponent item2 = GetComponentByName (name2);
+			KastComponent item1 = GetComponentByName (name1);
+			KastComponent item2 = GetComponentByName (name2);
 
 			// Weed out all possible sources of error.
 			if (item1 == null || item2 == null || (!(item1 is KastBox)) || (!(item2 is KastBox)))
@@ -180,7 +180,7 @@ namespace Kast.Server.Base
 					item.Destination = possibleFuture ?? item.Source;
 				}
 			}
-
+				
 			// Replace hook futures
 			foreach (KastHook item in Hooks) {
 				if (item.Box is KastFuture) {
@@ -191,10 +191,30 @@ namespace Kast.Server.Base
 		}
 
 		/// <summary>
+		/// Completely removes all null references
+		/// </summary>
+		public void PruneNull(){
+			Components.RemoveAll (x => x == null);
+		}
+
+		/// <summary>
+		/// Remove all Marked instances in the Relay
+		/// </summary>
+		public void PruneMarked(){
+			Components.FindAll (x => x.Marked).ForEach (x => RemoveComponent (x));
+		}
+	
+		/// <summary>
 		/// Pulse will cause all of the boxes to perform
 		/// their actions.
 		/// </summary>
 		public void Pulse(){
+
+			// Remove all null references (wrong builder)
+			PruneNull ();
+
+			// Remove all Marked instances
+			PruneMarked ();
 
 			// Attempt to satisfy any futures
 			FillFutures ();
@@ -205,7 +225,7 @@ namespace Kast.Server.Base
 
 			// Make the hooks react to the boxes and feeds
 			foreach(KastHook hook in Hooks)
-				foreach(IKastComponent component in Components.FindAll(x => x is KastBox || x is KastFeed))
+				foreach(KastComponent component in Components.FindAll(x => x is KastBox || x is KastFeed))
 					hook.React (component.Latest ());
 
 			// Make the hooks react to hooks

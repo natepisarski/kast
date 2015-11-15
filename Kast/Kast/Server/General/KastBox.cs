@@ -10,7 +10,7 @@ namespace Kast.Server.General
 	/// "process their buffer", which will run the command with the given
 	/// arguments and put the result in the Buffer.
 	/// </summary>
-	public class KastBox : IKastComponent
+	public class KastBox : KastComponent
 	{
 		/// <summary>
 		/// Gets or sets the name of the process.
@@ -23,22 +23,6 @@ namespace Kast.Server.General
 		/// </summary>
 		/// <value>The process arguments.</value>
 		public List<string> ProcessArguments { get; set; }
-
-		/// <summary>
-		/// Name the Box so that it can be accessed from the Relay.
-		/// </summary>
-		/// <value>The name for the box</value>
-		public string Name {get; set;}
-
-		/// <summary>
-		/// The master configuration
-		/// </summary>
-		private KastConfiguration MasterConfig {get; set;}
-
-		/// <summary>
-		/// The logger to write to
-		/// </summary>
-		private Logger Log { get; set; }
 
 		/// <summary>
 		/// Gets this Box's buffer
@@ -100,34 +84,40 @@ namespace Kast.Server.General
 			info.RedirectStandardOutput = true;
 			info.UseShellExecute = false;
 
-			Process runningProcess = Process.Start (info);
-
 			try {
+				Process runningProcess = Process.Start (info);
 				runningProcess.WaitForExit();
 				string processOutput = runningProcess.StandardOutput.ReadToEnd();
 				Buffer.Add(processOutput);
 			} catch(InvalidOperationException e) {
-				Console.WriteLine(ProcessName + MasterConfig.Get("message_output_error"));
-				Console.WriteLine (e.StackTrace);
+				Log.Log(ProcessName + MasterConfig.Get("message_output_error"));
+			} catch(Exception e){
+				Log.Log(MasterConfig.Get("message_ambiguous_process_error") + this.ProcessName);
+				Marked = true;
 			}
 		}
 
-		public void PulseReact(){
+		/// <summary>
+		/// Process the buffer
+		/// </summary>
+		public override void PulseReact(){
 			ProcessBuffer ();
 		}
 
-		public string Latest(){
+		/// <summary>
+		/// Return the latest output from this process
+		/// </summary>
+		public override string Latest(){
 			return Buffer [Buffer.Count - 1];
 		}
 
-		public void Defaults(){
+		/// <summary>
+		/// Set the default information for this KastBox
+		/// </summary>
+		public override void Defaults(){
 			Name = "";
 			Buffer = new List<string> ();
 			ProcessArguments = ProcessArguments ?? new List<string> ();
-		}
-
-		public string GetName(){
-			return Name;
 		}
 	}
 }

@@ -6,6 +6,9 @@ using Kast.Server.Feed;
 using Kast.Server.Base;
 using Kast.Server.Hook;
 
+using HumDrum.Operations;
+using HumDrum.Collections;
+
 namespace Kast.Server.Base
 {
 
@@ -45,7 +48,7 @@ namespace Kast.Server.Base
 		/// <returns>A future with the given name</returns>
 		/// <param name="future">The name to give this future</param>
 		public static KastFuture BuildFuture(string future){
-			var futureName = new string (Misc.Tail (future.ToCharArray ()).ToArray ());
+			var futureName = new string (Transformations.Tail (future.ToCharArray ()).AsArray ());
 			return new KastFuture (futureName);
 		}
 

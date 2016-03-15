@@ -3,6 +3,9 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 
+using HumDrum.Operations;
+using HumDrum.Collections;
+
 namespace Kast.Server.General
 {
 	/// <summary>

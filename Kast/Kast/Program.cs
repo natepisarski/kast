@@ -4,6 +4,9 @@ using System.Net;
 
 using Kast.Server.General;
 
+using HumDrum.Operations;
+using HumDrum.Collections;
+
 namespace Kast
 {
 	/*Master TODO list (in no particular order)*/
@@ -105,7 +108,7 @@ namespace Kast
 			} else {
 				// Send everything but "client" and "file" if it exists
 				var client = new Client.Program (masterConfig, logger);
-				client.main(Misc.Subsequence (args, (args[1].Equals("file")?3:1), args.Length).ToArray());
+				client.main(Transformations.Subsequence (args, (args[1].Equals("file")?3:1), args.Length).AsArray());
 			}
 			//*/
 		}

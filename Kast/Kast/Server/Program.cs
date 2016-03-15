@@ -9,6 +9,8 @@ using Kast.Server.Base;
 using Kast.Server;
 using Kast.Server.General;
 
+using HumDrum.Operations;
+
 namespace Kast.Server
 {
 	/// <summary>
@@ -36,7 +38,7 @@ namespace Kast.Server
 		public Program (KastConfiguration master)
 		{
 			MainServitor = new Servitor();
-			Relay = new KastRelay(master, new Logger(master));
+			Relay = new KastRelay(master, new Logger(master.Get("log")));
 			TickDelay = 1000;
 		}
 

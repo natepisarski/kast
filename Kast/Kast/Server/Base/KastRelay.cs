@@ -5,6 +5,7 @@ using Kast.Server.Feed;
 using Kast.Server.General;
 using Kast.Server.Hook;
 
+using HumDrum.Operations;
 namespace Kast.Server.Base
 {
 	/// <summary>

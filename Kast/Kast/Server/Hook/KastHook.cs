@@ -3,6 +3,9 @@
 using System.Collections.Generic;
 using Kast.Server.General;
 
+using HumDrum.Operations;
+using HumDrum.Collections;
+
 namespace Kast.Server.Hook
 {
 	/// <summary>
@@ -41,7 +44,7 @@ namespace Kast.Server.Hook
 			Name = "";
 
 			MasterConfig = masterConfig;
-			Log = new Logger (masterConfig);
+			Log = new Logger (masterConfig.Get("log"));
 		}
 
 		/// <summary>
@@ -54,7 +57,7 @@ namespace Kast.Server.Hook
 			Box = box;
 			Target = target;
 			MasterConfig = masterConfig;
-			Log = new Logger (masterConfig);
+			Log = new Logger (masterConfig.Get("log"));
 			try {
 				Option = this.BuildKastHookOption(config.Get("option"));
 				Name = config.Get("name");
@@ -82,12 +85,12 @@ namespace Kast.Server.Hook
 
 			case KastHookOption.First:
 				if (inputWords [0].Equals (Target))
-					lBox.ProcessArguments = Misc.Subsequence (inputWords, 1, inputWords.Count);
+					lBox.ProcessArguments.AddRange(Transformations.Subsequence (inputWords, 1, inputWords.Count));
 				break;
 
 			case KastHookOption.InnerKeep:
 			case KastHookOption.InnerRemove:
-				if (Misc.Any (inputWords, x => x == Target)) {
+				if (Predicates.Any (inputWords, x => x == Target)) {
 					if (Option == KastHookOption.InnerKeep)
 						lBox.ProcessArguments = inputWords;
 					else{
@@ -100,7 +103,7 @@ namespace Kast.Server.Hook
 
 			case KastHookOption.Last:
 				if (inputWords [inputWords.Count - 1].Equals (Target))
-					lBox.ProcessArguments = Misc.Subsequence (inputWords, 0, inputWords.Count - 2);
+					lBox.ProcessArguments.AddRange(Transformations.Subsequence (inputWords, 0, inputWords.Count - 2));
 				break;
 			}
 

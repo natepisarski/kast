@@ -5,6 +5,8 @@ using System.Text;
 
 using Kast.Server.General;
 
+using HumDrum.Operations;
+using HumDrum.Collections;
 namespace Kast.Client
 {
 	public class Program

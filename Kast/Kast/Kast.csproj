@@ -8,6 +8,8 @@
     <RootNamespace>Kast</RootNamespace>
     <AssemblyName>Kast</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,13 +41,9 @@
     <Compile Include="Server\Feed\KastFeedOption.cs" />
     <Compile Include="Server\General\KastBox.cs" />
     <Compile Include="Server\General\KastConfiguration.cs" />
-    <Compile Include="Server\General\Misc.cs" />
-    <Compile Include="Server\General\Sections.cs" />
     <Compile Include="Server\Hook\KastHook.cs" />
     <Compile Include="Server\Hook\KastHookOption.cs" />
-    <Compile Include="Servitor.cs" />
     <Compile Include="Client\Program.cs" />
-    <Compile Include="Server\General\Logger.cs" />
     <Compile Include="Server\General\KastFuture.cs" />
     <Compile Include="Server\General\KastComponent.cs" />
   </ItemGroup>
@@ -54,6 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\" />
-    <Folder Include="Properties\" />
+    <Folder Include="..\..\..\Kast\Kast\Kast\Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\sb\HumDrum\HumDrum\HumDrum.csproj">
+      <Project>{715D15D4-68CB-4E55-B9C6-DCFE791C9B00}</Project>
+      <Name>HumDrum</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

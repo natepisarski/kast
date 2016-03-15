@@ -3,6 +3,7 @@ using System.IO;
 
 using System.Collections.Generic;
 
+using HumDrum.Collections;
 namespace Kast.Server.General
 {
 	public class KastConfiguration
@@ -47,7 +48,7 @@ namespace Kast.Server.General
 		/// <returns>The array unbound as a dictionary</returns>
 		/// <param name="builderList">A list of strings which contain assets</param>
 		public static Dictionary<string, string> BuildAssets(string[] builderList){
-			Tuple<string[], string[]> unboundList = Misc.Unbind (builderList);
+			Tuple<string[], string[]> unboundList = Transformations.Unbind (builderList);
 
 			return BuildAssets (unboundList.Item1, unboundList.Item2);
 		}

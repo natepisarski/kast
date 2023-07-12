@@ -1,32 +1,41 @@
 # Kast
-Kast is a program for managing loosely coupled binary services in a variety of ways. Loosely Coupled Services (LSC) are a light coupling between components of a greater system. In the case of kast, these are system binaries.
+Kast is a program for loosely-coupled binary microservices, similar to [gearman](http://gearman.org/) but for full binaries. It's like the Unix pipe on steroids.
 
-Kast takes the output from programs and feeds it to others, optionally causing them to take in the output of the calling program, in much the same way that Unix pipes do. For instance, to output every line in a directory, it could be implemented as such:
-
-```
+```shell
 box ls +args -R,-a name reader+
 feed |@ls| |box cat| last
 ```
 
+It also lets you do some things that [supervisord](http://supervisord.org/) would traditionally do, like run commands on a schedule, or set up event listeners.
+
 ## Command Line Arguments
 ### Server
-Server currently accepts the argument "file" and a configuration file in Sections syntax. See Sections.cs in source for a tutorial on how sections are laid out. It can also run standalone by assigning the default arguments to itself.
+`server` runs the Kast server that allows this all to function
+
 ### Client
-From "kast client help":
+From "`kast client help`":
 
 [] denotes a required argument. {} denotes optional ones. OR denotes choices
 
 Client commands templates are:
 
+```bash
 kast client box [command] +{args comma,separated,args} {name boxName}
+```
 
+```bash
 kast client feed |[box syntax]| |[box syntax]| |{name feedName} {option all OR last}
+```
 
+```bash
 kast client hook |[box syntax]| target |{name hookName} {option first OR last OR innerRemove OR innerKeep}
+```
 
+```bash
 kast client unlist name
+```
 
-In places where [box syntax] is accepted, @name is accepted to reference a currently running box in the relay
+In places where [box syntax] is accepted, @name is accepted to reference a currently running box in the server
 
 ## License
 BSD-3 Clause
